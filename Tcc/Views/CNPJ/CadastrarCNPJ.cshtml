@@ -1,38 +1,56 @@
-﻿@model Tcc.Models.CadastrarCNPJ
-<title>Agendador | Cadastrar CNPJ</title>
+﻿<script type="text/javascript">
 
-@using (Html.BeginForm("CadastrarCNPJIncluir", "CNPJ", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    <h4>Entre com suas informações.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.NomeFantasia, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.NomeFantasia, new { @class = "form-control" })
+    var aCadastrarCNPJ = null;
+
+    $(document).ready(function () {
+        aCadastrarCNPJ = new CadastrarCNPJ();
+        aCadastrarCNPJ.inicializar("secCadastrarCNPJ");
+    });
+
+</script>
+
+<section style="margin-top:25px;" id="secCadastrarCNPJ">
+    <form>
+        <div class="form-group">
+            <label for="CNPJ">CNPJ</label>
+            <input class="form-control" data-bind="value: CNPJ" placeholder="CNPJ...">
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.RazaoSocial, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.RazaoSocial, new { @class = "form-control" })
+
+        <button style="margin-bottom:10px;" type="button" data-bind="click:buscarReceita" class="btn btn-primary">Buscar</button>
+
+        <div class="form-group">
+            <label for="situacao">Situacao</label>
+            <input class="form-control" data-bind="value: situacao" placeholder="situacao...">
         </div>
-    </div>
-    <div class="form-group">
-    @Html.LabelFor(m => m.CNPJ, new { @class = "col-md-2 control-label" })
-    <div class="col-md-10">
-        @Html.TextBoxFor(m => m.CNPJ, new { @class = "form-control" })
-    </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Servico, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Servico, new { @class = "form-control" })
+        <div class="form-group">
+            <label for="fantasia">Nome Fantasia</label>
+            <input class="form-control" data-bind="value: fantasia" placeholder="fantasia...">
         </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+        <div class="form-group">
+            <label for="logradouro">Logradouro</label>
+            <input class="form-control" data-bind="value: logradouro" placeholder="logradouro...">
         </div>
-    </div>
-}
+        <div class="form-group">
+            <label for="numero">Número</label>
+            <input class="form-control" data-bind="value: numero" placeholder="numero...">
+        </div>
+        <div class="form-group">
+            <label for="bairro">Bairro</label>
+            <input class="form-control" data-bind="value: bairro" placeholder="bairro...">
+        </div>
+        <div class="form-group">
+            <label for="cep">CEP</label>
+            <input class="form-control" data-bind="value: cep" placeholder="cep...">
+        </div>
+        <div class="form-group">
+            <label for="municipio">Municipio</label>
+            <input class="form-control" data-bind="value: municipio" placeholder="municipio...">
+        </div>
+        <div class="form-group">
+            <label for="uf">UF</label>
+            <input class="form-control" data-bind="value: uf" placeholder="uf...">
+        </div>
+
+        <button type="submit" data-bind="click:cadastrarEmpresa" class="btn btn-success">Cadastrar</button>
+    </form>
+</section>

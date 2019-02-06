@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+
+@{
+    ViewBag.Title = "Papéis";
+}
+
+<h2>Administrar papéis</h2>
+
+<br />
+
+@using (Html.BeginForm("CreateRole", "Admin", FormMethod.Post, new { @class = "form-inline", role = "form" , @style = "margin-top: 50px; margin-bottom: 75px;" }))
+{
+    <div class="form-group mb-5">
+        @*@Html.LabelFor(m => new Microsoft.AspNet.Identity.EntityFramework.IdentityRole().Name, new { @class = "col-md-2 control-label", @style = "text-align: left" })*@
+        <label class = "col-md-4 control-label">Nome do papel</label>
+        <div class="col-md-4">
+            @Html.TextBoxFor(m => new Microsoft.AspNet.Identity.EntityFramework.IdentityRole().Name, new { @class = "form-control" })
+        </div>
+        <div class="col-md-3">
+            <input type="submit" style="margin-left:35px;" class="btn btn-default" value="Adicionar" />
+        </div>
+    </div>    
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Name)*@
+            <label class="col-md-2">Nome do papel</label>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @if (item.Name != "DEFAULT" && item.Name != "ADMIN")
+                {
+                    @Html.ActionLink("Deletar", "DeletarRole", new { id = item.Id })
+                }
+            </td>
+        </tr>
+    }
+
+</table>

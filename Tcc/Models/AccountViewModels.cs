@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tcc.Models
@@ -108,5 +109,5 @@ namespace Tcc.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-    }
+    }    
 }
