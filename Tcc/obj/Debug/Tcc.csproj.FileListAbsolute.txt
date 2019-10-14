@@ -1,3 +1,4 @@
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Scripts\knockout-mapping.js
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Tcc.dll.config
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Tcc.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Tcc.pdb
@@ -76,6 +77,8 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPage
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.Razor.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\WebGrease.dll
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Newtonsoft.Json.pdb
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Newtonsoft.Json.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.Helpers.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.Mvc.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.Optimization.xml
@@ -83,7 +86,6 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.Razor.x
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.Deployment.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.Razor.xml
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Newtonsoft.Json.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Antlr3.Runtime.pdb
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\EntityFramework.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\EntityFramework.SqlServer.xml
@@ -106,5 +108,3 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.C
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.CopyComplete
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.pdb
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Scripts\knockout-mapping.js

@@ -1,0 +1,118 @@
+﻿<script type="text/javascript">
+
+    var aMinhaEmpresa = null;
+    var data = "@ViewBag.data";
+    var parametrizacao = @Html.Raw(ViewBag.parametrizacao);
+
+    $(document).ready(function () {
+        aMinhaEmpresa = new MinhaEmpresa();
+        aMinhaEmpresa.inicializar("secMinhaEmpresa", data, parametrizacao);
+    });
+    
+</script>
+
+<section style="margin-top:25px;" id="secMinhaEmpresa">
+    <div class="row">
+        <div class="col-lg-8">
+            <div>
+                <h3 data-bind="text: data"><!--Dia completo--></h3>
+                <!-- Agendas -->
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                #
+                            </th>
+                            <th scope="col">
+                                Quem
+                            </th>
+                            <th scope="col">
+                                O que
+                            </th>
+                            <th scope="col">
+                                Quando
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: HORARIOAGENDA">
+                        <tr>
+                            <td scope="row" data-bind="text: $index"></td>
+                            <td data-bind="text: NOME"><!--Nome--></td>
+                            <td data-bind="text: SERVICO"><!--Serviço--></td>
+                            <td data-bind="text: HORA"><!--Data--></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="jumbotron" style="padding: 30px">
+                <!--Escolher dia-->
+                <form>
+                    <div class='form-group'>
+                        <label>Selecionar um dia diferente</label>
+                        <input data-bind="value: dataInput" class="form-control" type="date" name="name" value="" />
+                    </div>
+                    <button data-bind="click: alterarData" type="submit" class="btn btn-outline-primary">Trocar dia</button>
+                </form>
+                <!-- Serviços e clientes fixos -->
+                <div style="margin-top:10px;">
+                    @Html.ActionLink("Gerenciar Serviços", "Servico", "Servico", null, null)
+                </div>
+                <div style="margin-top:10px;">
+                    @Html.ActionLink("Gerenciar Clientes Fixos", "Index", "ClienteFixo", null, null)
+                </div>
+                <div style="margin-top:10px;">
+                    <button id="mostrarModal" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                        Alterar horários base
+                    </button>
+                </div>
+                <!-- Button trigger modal -->
+                <button style="display:none;" id="mostrarModal" type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Launch demo modal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" data-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Incluir janela de trabalho</h5>
+                    <button type="button" data-bind="visible: aParametrizacaoEmpresa.PARAMETRIZACAOAGENDAID() > 0" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class='form-group'>
+                            <label>Horário início:</label>
+                            <input data-bind="value: aParametrizacaoEmpresa.HORAINI" class="form-control" type="number" name="name" value="" />
+                        </div>
+                        <div class='form-group'>
+                            <label>Horário fim:</label>
+                            <input data-bind="value: aParametrizacaoEmpresa.HORAFIM" class="form-control" type="number" name="name" value="" />
+                        </div>
+                        <label style="color: darkred">* Os horários não podem ultrapassar o intervalo de 0h a 23h!</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>*@
+                    <button type="submit" data-bind="click: salvarParametrizacao" class="btn btn-outline-success">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*Calendário*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+@*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />*@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />

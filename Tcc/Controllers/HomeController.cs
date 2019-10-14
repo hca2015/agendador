@@ -7,7 +7,7 @@ using Tcc.Models;
 
 namespace Tcc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AppController
     {
         public HomeController()
         {

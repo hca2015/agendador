@@ -3,17 +3,19 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Tcc.Entity;
 using Tcc.Models;
 
 namespace Tcc.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : AppController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -22,7 +24,7 @@ namespace Tcc.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +36,9 @@ namespace Tcc.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -72,10 +74,22 @@ namespace Tcc.Controllers
             {
                 return View(model);
             }
+            Entity.User user = null;
+            ApplicationUser applicationUser = UserManager.Find(model.Email, model.Password);
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            if (applicationUser != null)
+                user = new UsersRepository().GetUserId(applicationUser.Id);
+
+            SignInStatus result;
+
+            if (user != null && user.ativo == 0)
+            {
+                ModelState.AddModelError("", "Usuário está inativo.");
+                return View(model);
+            }
+
+            result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -86,7 +100,7 @@ namespace Tcc.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Usuário ou senha inválidos.");
                     return View(model);
             }
         }
@@ -120,7 +134,7 @@ namespace Tcc.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            SignInStatus result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -149,24 +163,98 @@ namespace Tcc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            ApplicationUser user = null;
+            IdentityResult result = null;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                result = await UserManager.AddToRoleAsync(user.Id, "default".ToUpper());
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                model.CPF = model.CPF.removerCaracteresEspeciais();
+                bool cadastroSlave = User.Identity.IsAuthenticated;
+                User lUsuarioMaster = null;
+                UsersRepository lUsersRepository = new UsersRepository();
 
-                    return RedirectToAction("Index", "Home");
+                if (cadastroSlave)
+                    lUsuarioMaster = lUsersRepository.GetUserId(User.Identity.GetUserId());
+
+                using (TransactionScope _scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    User lUsuarioInativo = lUsersRepository.getMembershipEmail(model.Email);
+
+                    if (lUsuarioInativo != null)
+                    {
+                        if (lUsuarioInativo.cpfDiferente(model.CPF))
+                        {
+                            AddError("Login já existente, porém CPF divergente");
+                            return View(model);
+                        }
+
+                        if (lUsersRepository.getCPF(model.CPF) != null)
+                        {
+                            AddError("CPF ativo já cadastrado.");
+                            return View(model);
+                        }
+
+                        lUsuarioInativo.ativo = 1;
+
+                        if (cadastroSlave)
+                            lUsuarioInativo.usermasterid = lUsuarioMaster.userid;
+
+                        EditarUsers lEditarUsers = new EditarUsers();
+                        if (!lEditarUsers.editar(lUsuarioInativo))
+                            AddError("Não foi possível ativar o usuário");
+
+                        var token = UserManager.GeneratePasswordResetToken(lUsuarioInativo.membershipid);
+                        result = UserManager.ResetPassword(lUsuarioInativo.membershipid, token, model.Password);
+
+                        if (!cadastroSlave)
+                            user = UserManager.FindByEmail(model.Email);
+                    }
+                    else
+                    {
+                        user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                        result = await UserManager.CreateAsync(user, model.Password);
+                        result = await UserManager.AddToRoleAsync(user.Id, "default".ToUpper());
+                        if (result.Succeeded)
+                        {
+                            User lUser = new User()
+                            {
+                                membershipid = user.Id,
+                                cpf = model.CPF,
+                                email = model.Email,
+                                datanascimento = model.DataNascimento,
+                                nome = model.Nome,
+                                telefone = model.Telefone,
+                                ativo = 1,
+                                usermasterid = cadastroSlave ? (int?)lUsuarioMaster.userid : null
+                            };
+
+                            IncluirUsers lIncluirUsers = new IncluirUsers();
+                            if (!lIncluirUsers.incluir(lUser))
+                            {
+                                foreach (var item in lIncluirUsers.Messages)
+                                {
+                                    AddError(item.ToString());
+                                }
+                                _scope.Dispose();
+                                return View(model);
+                            }
+                        }
+                    }
+                    if (ModelState.IsValid)
+                    {
+                        if (cadastroSlave) { _scope.Complete(); return RedirectToAction("Index", "Manage"); }
+                        else
+                        {
+                            SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+                            _scope.Complete();
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    else
+                    {
+                        _scope.Dispose();
+                        return View(model);
+                    }
                 }
-                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -182,7 +270,7 @@ namespace Tcc.Controllers
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -203,7 +291,7 @@ namespace Tcc.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                ApplicationUser user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
@@ -249,13 +337,13 @@ namespace Tcc.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            ApplicationUser user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -288,13 +376,13 @@ namespace Tcc.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
+            string userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
                 return View("Error");
             }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+            System.Collections.Generic.IList<string> userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
+            System.Collections.Generic.List<SelectListItem> factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
@@ -323,14 +411,14 @@ namespace Tcc.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            SignInStatus result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -363,13 +451,13 @@ namespace Tcc.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                ExternalLoginInfo info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
+                ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                IdentityResult result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
@@ -438,10 +526,15 @@ namespace Tcc.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach (string error in result.Errors)
             {
                 ModelState.AddModelError("", error);
             }
+        }
+
+        private void AddError(String error)
+        {
+            ModelState.AddModelError("", error);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
@@ -473,7 +566,7 @@ namespace Tcc.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
+                AuthenticationProperties properties = new AuthenticationProperties { RedirectUri = RedirectUri };
                 if (UserId != null)
                 {
                     properties.Dictionary[XsrfKey] = UserId;

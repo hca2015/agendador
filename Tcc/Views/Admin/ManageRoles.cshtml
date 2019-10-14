@@ -17,7 +17,7 @@
             @Html.TextBoxFor(m => new Microsoft.AspNet.Identity.EntityFramework.IdentityRole().Name, new { @class = "form-control" })
         </div>
         <div class="col-md-3">
-            <input type="submit" style="margin-left:35px;" class="btn btn-default" value="Adicionar" />
+            <input type="submit" style="margin-left:35px;" class="btn btn-outline-primary" value="Adicionar" />
         </div>
     </div>    
 }
@@ -40,7 +40,7 @@
             <td>
                 @if (item.Name != "DEFAULT" && item.Name != "ADMIN")
                 {
-                    @Html.ActionLink("Deletar", "DeletarRole", new { id = item.Id })
+                    @Html.ActionLink("Deletar", "DeletarRole", null, new { id = item.Id })
                 }
             </td>
         </tr>

@@ -1,29 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 
-namespace Tcc.Entity
+namespace Tcc
 {
     public class Message
     {
+        public enum kdType
+        {
+            [Description("Sucesso")]
+            Success,
+            [Description("Erro")]
+            Error,
+            [Description("Info")]
+            Info
+        }
         public Message()
         {
 
         }
-
-        public Message(string prMessage, string prCurrentMethod)
+        public Message(string prMessage, kdType? type = null, string prCurrentMethod = null)
         {
             message = prMessage;
+            messageType = type;
             currentMethod = prCurrentMethod;
         }
 
         public string message { get; set; }
 
         public string currentMethod { get; set; }
+        public kdType? messageType { get; set; }
 
-        public List<Message> messagelist { get; set; }
-
-        public void addMessage(string prMessage, string prCurrentMethod)
+        public override string ToString()
         {
-            messagelist.Add(new Message(prMessage, prCurrentMethod));
+            return message;
         }
     }
+        
 }

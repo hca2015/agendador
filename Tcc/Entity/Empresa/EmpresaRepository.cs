@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
-using Tcc.Models;
 
 namespace Tcc.Entity
 {
@@ -14,20 +11,21 @@ namespace Tcc.Entity
         {
 
         }
-        public DbSet<empresa> empresas { get; set; }
-        
+        public DbSet<Empresa> empresas { get; set; }
+        public DbSet<UserEmpresa> EmpresaUsers { get; set; }
+
         public bool add(Modelo prEntity)
         {
             try
             {
-                var Entity = (empresa)prEntity;
+                Empresa Entity = (Empresa)prEntity;
 
                 empresas.Add(Entity);
 
                 return SaveChanges() > 0;
             }
             catch (Exception e)
-            {
+            {                
                 return false;   
             }            
         }
@@ -36,7 +34,7 @@ namespace Tcc.Entity
         {
             try
             {
-                var Entity = (empresa)prEntity;
+                Empresa Entity = (Empresa)prEntity;
 
                 empresas.Attach(Entity);
 
@@ -45,7 +43,7 @@ namespace Tcc.Entity
                 return SaveChanges() > 0;
             }
             catch (Exception e)
-            {
+            {                 
                 return false;
             }        
         }
@@ -54,7 +52,7 @@ namespace Tcc.Entity
         {
             try
             {
-                var Entity = (empresa)prEntity;
+                Empresa Entity = (Empresa)prEntity;
 
                 empresas.Attach(Entity);
 
@@ -66,9 +64,33 @@ namespace Tcc.Entity
                 return SaveChanges() > 0;
             }
             catch (Exception e)
-            {
+            {                
                 return false;
             }
+        }
+
+        public Empresa getId(int empresaid)
+        {
+            return (from e in empresas where e.empresaid == empresaid select e).FirstOrDefault();
+        }
+
+        public Empresa getUser(int prUserId)
+        {
+            IQueryable<Empresa> linq = from e in empresas
+                                       join eu in EmpresaUsers on e.empresaid equals eu.empresaid
+                                       where eu.userid == prUserId
+                                       select e;
+
+            return linq.FirstOrDefault();
+        }
+
+        public Empresa getCNPJ(string CNPJ)
+        {
+            IQueryable<Empresa> linq = from e in empresas                                       
+                                       where e.cnpj == CNPJ
+                                       select e;
+
+            return linq.FirstOrDefault();
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Tcc.Entity.Servico>
+
+@{
+    ViewBag.Title = "Servico";
+}
+
+<h2>Serviços da minha empresa</h2>
+
+<p>
+    @Html.ActionLink("Adicionar Servico", "Create", null, null)
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.empresaid)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valorservico)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.empresaid)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.valorservico)
+        </td>
+        <td>
+            @Html.ActionLink("Editar servico", "Edit", new { id=item.servicoid }, null) |
+            @*@Html.ActionLink("Details", "Details", new { id=item.SERVICOID }) |*@
+            @Html.ActionLink("Deletar servico", "Delete", new { id=item.servicoid }, null)
+        </td>
+    </tr>
+}
+
+</table>

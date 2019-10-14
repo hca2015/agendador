@@ -56,7 +56,7 @@ namespace Tcc.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Senha")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
@@ -71,14 +71,30 @@ namespace Tcc.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name = "Nome")]
+        public string Nome { get; set; }
+
+        [Display(Name = "Data de Nascimento")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime? DataNascimento { get; set; }
+
+        [Display(Name = "Telefone")]
+        public string Telefone { get; set; }
+
+        [Required]
+        [Display(Name = "CPF")]
+        [CPF(ErrorMessage = "CPF Digitado é inválido")]
+        public string CPF { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Senha")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Confirmar senha")]
+        [Compare("Password", ErrorMessage = "As senhas digitadas não são iguais.")]
         public string ConfirmPassword { get; set; }
     }
 

@@ -1,0 +1,45 @@
+﻿<script type="text/javascript">
+
+    var aServico = null;
+
+    $(document).ready(function () {
+        aServico = new Servico();
+        aServico.inicializar("secNovoServico", null);
+    });
+
+</script>
+
+<h2>Novo serviço</h2>
+
+<section id="secNovoServico">
+    <form>
+        <div class="form-horizontal">
+            <h4>Servico</h4>
+            <hr />
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Descrição</label>
+                    <input type="text" class="form-control" data-bind="value: descricao" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label>Valor do serviço</label>
+                    <input type="text" class="form-control" data-bind="value: valorservico" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-outline-success" data-bind="click: inserirServico">Inserir</button>
+        </div>
+    </form>
+</section>
+
+<div style="margin-top: 30px;">
+    [ @Html.ActionLink("De volta a lista", "Servico", null, null) ]
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

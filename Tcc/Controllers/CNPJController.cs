@@ -1,63 +1,85 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using Tcc.Entity;
-using Tcc.Models;
 
 namespace Tcc.Controllers
 {
-    //[Authorize]
-    public class CNPJController : Controller
+    [Authorize]
+    public class CNPJController : AppController
     {
         [HttpGet]
         public ActionResult CadastrarCNPJ()
         {
             return View();
-        }    
-                
+        }
+
+        public ActionResult MinhaEmpresa()
+        {
+            ViewBag.data = DateTime.Now.ToShortDateString();
+            return View();
+        }
+
         public JsonResult cnpjReceita(string cnpj)
         {
-            ConsultaReceita cs = new ConsultaReceita()
+            cnpj = Utility.removerCaracteresEspeciais(cnpj);
+
+            if (ValidaCNPJ.IsCnpj(cnpj))
             {
-                cnpj = Regex.Replace(cnpj, @"\W+", "")
-            };
+                ConsultaReceita cs = new ConsultaReceita()
+                {
+                    cnpj = Regex.Replace(cnpj, @"\W+", "")
+                };
 
-            var link = "https://www.receitaws.com.br/v1/cnpj/"+cs.cnpj;
+                string link = "https://www.receitaws.com.br/v1/cnpj/" + cs.cnpj;
 
-            WebRequest _request = WebRequest.Create(link);
+                WebRequest _request = WebRequest.Create(link);
 
-            _request.Method = "GET";
+                _request.Method = "GET";
 
-            WebResponse response = _request.GetResponse();
+                WebResponse response = _request.GetResponse();
 
-            string responseText;
+                string responseText;
 
-            using (var reader = new StreamReader(response.GetResponseStream(), Encoding.ASCII))
+                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.ASCII))
+                {
+                    responseText = reader.ReadToEnd();
+                }
+
+                Empresa responseObject = JsonConvert.DeserializeObject<Empresa>(responseText);
+                //return View("CadastrarCNPJ", responseObject);
+                return Json(responseObject);
+            }
+            else
             {
-                responseText = reader.ReadToEnd();
+                aContextoExecucao.addErro("CNPJ Inválido para consulta");
+                Response.StatusCode = 500; //Write your own error code
+                Response.Write(JsonConvert.SerializeObject(aContextoExecucao.Messages));
+                return null;
+            }
+            //return Json(new Message("CNPJ Inválido para consulta", Message.kdType.Error));
+        }
+
+        public ActionResult cadastrarEmpresa(Empresa prEmpresa)
+        {
+            IncluirEmpresa incluirEmpresa = new IncluirEmpresa();
+
+            if (string.IsNullOrWhiteSpace(prEmpresa.cnpj))
+            {
+                aContextoExecucao.addErro("Informar parametro");
+                return Json(new Message("Informar parametro", Message.kdType.Error));
             }
 
-            var responseObject = JsonConvert.DeserializeObject<empresa>(responseText);
+            if (incluirEmpresa.incluir(prEmpresa, usuario.userid))
+            {
+                return Json(incluirEmpresa.Messages);
+            }
 
-            //return View("CadastrarCNPJ", responseObject);
-            return Json(responseObject);
-        }  
-        
-        public JsonResult cadastrarEmpresa(empresa prEmpresa)
-        {
-            EmpresaRepository empresaRepository = new EmpresaRepository();
-
-            if (!empresaRepository.add(prEmpresa))
-                return Json(false);
-            else
-                return Json(true);
+            return Json(incluirEmpresa.Messages);
         }
     }
 }

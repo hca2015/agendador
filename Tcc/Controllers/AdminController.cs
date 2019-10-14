@@ -11,7 +11,7 @@ using Tcc.Models;
 namespace Tcc.Controllers
 {
     [Authorize(Roles = "ADMIN")]
-    public class AdminController : Controller
+    public class AdminController : AppController
     {
         static RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
@@ -34,7 +34,7 @@ namespace Tcc.Controllers
 
         public ActionResult DeletarUsuario(string id)
         {
-            var contexto = new ApplicationDbContext();
+            ApplicationDbContext contexto = new ApplicationDbContext();
 
             contexto.Users.Remove(contexto.Users.Where(x => x.Id == id).FirstOrDefault());
 
@@ -53,7 +53,7 @@ namespace Tcc.Controllers
         {
             name = name.ToString().ToUpper().Trim();
 
-            var role = new IdentityRole(name);
+            IdentityRole role = new IdentityRole(name);
 
             if(roleManager.RoleExists(name))
                 return RedirectToAction("ManageRoles");

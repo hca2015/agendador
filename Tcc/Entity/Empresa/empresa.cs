@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tcc.Entity
 {
-    public class empresa : Modelo
+    public class Empresa : Modelo
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EMPRESAID { get; set; }
+        public int empresaid { get; set; }
         [Display(Name = "CNPJ")]
         public string cnpj { get; set; }
 
@@ -37,5 +37,7 @@ namespace Tcc.Entity
 
         [Display(Name = "Estado")]
         public string uf { get; set; }
+
+        public int useridowner { get; set; }
     }
 }

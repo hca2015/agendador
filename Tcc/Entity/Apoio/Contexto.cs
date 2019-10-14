@@ -1,9 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace Tcc.Entity
 {
     public class Contexto : DbContext
-    {
+    {   
         protected override void OnModelCreating(DbModelBuilder dbModelBuilder)
         {
             dbModelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
@@ -12,7 +13,7 @@ namespace Tcc.Entity
         }
         public Contexto() : base ("DefaultConnection")   
         {
-
+            Database.SetInitializer<Contexto>(null);
         }            
     }
 }
