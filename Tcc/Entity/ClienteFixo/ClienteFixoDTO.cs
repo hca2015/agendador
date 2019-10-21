@@ -8,25 +8,32 @@ namespace Tcc.Entity
     public class ClienteFixoDTO : Modelo
     {        
         [Key]
-        public decimal clienteid { get; set; }
-        [Description("Último pagamento")]
-        [DataType(DataType.Date)]
-        public DateTime dataultimopagamento { get; set; }
-        [Description("Frequencia")]
+        public int clientefixoid { get; set; }
+        public int? clienteid { get; set; }
+        [DisplayName("Último pagamento")]
+        [DataType(DataType.Date)]       
+        public DateTime? dataultimopagamento { get; set; }
+        [DisplayName("Dia da semana")]
+        [EnumDataType(typeof(DayOfWeek))]
+        public DayOfWeek diasemana { get; set; }
+        [DisplayName("Frequencia")]
         [EnumDataType(typeof(ClienteFixo.TipoFrequencia))]
-        public int tipofrequencia { get; set; }
-        [Description("Horário")]        
+        public ClienteFixo.TipoFrequencia tipofrequencia { get; set; }
+        [DisplayName("Horário")]        
         public int horario { get; set; }
-        [Description("Nome cliente")]
+        [DisplayName("Nome cliente")]
         [DataType(DataType.Text)]
         public string nomecliente { get; set; }
-        [Description("Data de nascimento")]
+        [DisplayName("Data de nascimento")]
         [DataType(DataType.Date)]
-        public DateTime datanascimento { get; set; }
-        [Description("Documento")]
+        public DateTime? datanascimento { get; set; }
+        [DisplayName("Documento")]
         [DataType(DataType.Text)]
+        [CPF]
         public string documento { get; set; }
-        [Description("Nome serviço")]
+        [DataType(DataType.Text)]
+        public int servicoid { get; set; }
+        [DisplayName("Nome serviço")]
         [DataType(DataType.Text)]
         public string nomeservico { get; set; }
         public int empresaid { get; set; }

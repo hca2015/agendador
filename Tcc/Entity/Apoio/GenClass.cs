@@ -90,6 +90,14 @@ namespace Tcc.Apoio
             return false;
         }
 
+
+        public virtual bool withoutError(Message prMessage)
+        {
+            Messages.Add(prMessage);
+
+            return withoutError();
+        }
+
         public virtual bool withErrororWarn()
         {
             if (Messages.Count > 0)
@@ -116,6 +124,11 @@ namespace Tcc.Apoio
         public virtual void addErro(string prErro)
         {
             Messages.Add(new Message(prErro, Message.kdType.Error));
+        }
+
+        public virtual Message newError(string prErro)
+        {
+            return new Message(prErro, Message.kdType.Error);
         }
     }
 }

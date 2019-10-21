@@ -16,8 +16,11 @@ namespace Tcc.Entity
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal clienteid { get; set; }
-        public DateTime dataultimopagamento { get; set; }
+        public int clientefixoid { get; set; }
+        public int servicoid { get; set; }
+        public int clienteid { get; set; }
+        public DateTime? dataultimopagamento { get; set; }
+        public int diasemana { get; set; }
         public int tipofrequencia { get; set; }
         public int horario { get; set; }
     }

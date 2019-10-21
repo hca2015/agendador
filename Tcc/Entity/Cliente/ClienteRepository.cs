@@ -70,5 +70,11 @@ namespace Tcc.Entity
             }
         }
 
+        public Cliente getDocumento(string d)
+        {
+            var linq = from c in Clientes where c.documento == d select c;
+
+            return linq.FirstOrDefault();
+        }
     }
 }

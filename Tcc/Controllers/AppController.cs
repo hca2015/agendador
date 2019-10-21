@@ -45,6 +45,16 @@ namespace Tcc.Controllers
 
         [NotMapped]
         [JsonIgnore]
+        protected Empresa empresa
+        {
+            get
+            {
+                return (new EmpresaRepository().getUser(usuario.userid));
+            }
+        }
+
+        [NotMapped]
+        [JsonIgnore]
         private GenClass _ContextoExecucao;
         [NotMapped]
         [JsonIgnore]

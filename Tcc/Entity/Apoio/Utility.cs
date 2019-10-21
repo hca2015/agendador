@@ -120,7 +120,7 @@ namespace Tcc
         public override bool IsValid(object value)
         {
             var cpf = Convert.ToString(value);
-
+            cpf = cpf.removerCaracteresEspeciais();
             if (String.IsNullOrEmpty(cpf))
                 return true;
 

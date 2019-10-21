@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Data.Entity;
 
 namespace Tcc.Entity
@@ -11,6 +12,11 @@ namespace Tcc.Entity
 
         }
         public DbSet<ClienteFixoEmpresa> ClienteFixoEmpresas { get; set; }
+
+        public ClienteFixoEmpresa getClienteFixo(int id)
+        {
+            return (from c in ClienteFixoEmpresas where c.clientefixoid == id select c).FirstOrDefault();
+        }
 
         public bool add(Modelo prEntity)
         {

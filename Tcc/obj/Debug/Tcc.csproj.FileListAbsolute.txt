@@ -108,3 +108,4 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.C
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.CopyComplete
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.pdb
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache

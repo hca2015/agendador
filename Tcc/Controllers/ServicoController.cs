@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Tcc.Entity;
 
@@ -77,6 +78,11 @@ namespace Tcc.Controllers
                 return RedirectToAction("Delete", lServico);
 
             return RedirectToAction("Servico");
+        }
+
+        public ActionResult searchservico(string term)
+        {
+            return Json(new ServicoRepository().Servicos.Where(c => c.descricao.ToUpper().StartsWith(term.ToUpper())).Select(a => new { label = a.descricao, id = a.servicoid }), JsonRequestBehavior.AllowGet);
         }
     }
 }

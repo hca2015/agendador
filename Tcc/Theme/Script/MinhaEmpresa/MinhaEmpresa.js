@@ -8,6 +8,8 @@
     
     this.data = ko.observable("");
     this.dataInput = ko.observable("");
+
+    this.acoAgenda = ko.observableArray([]);
         
     this.getDados = function () {
         server({            
@@ -21,8 +23,6 @@
     }
    
     this.alterarData = function () {
-
-        debugger;
 
         if (obj.dataInput() === "" || obj.dataInput() === null || obj.dataInput() == undefined) {
             toastr.error("Coloque uma data valida!");
@@ -67,7 +67,7 @@
         }
     }
 
-    this.inicializar = function (prForm, prData, prParametrizacao) {
+    this.inicializar = function (prForm, prData, prParametrizacao, prAgenda) {
         obj.data(prData);
 
         var dataQuebrada = prData.split('/');
@@ -80,6 +80,7 @@
         //obj.verificarParametrizacao();
         //entao vai ser chamado assim...
         tratarRetorno(prParametrizacao, obj.validarParametrizacao);
+        obj.acoAgenda(prAgenda);
         
         ko.applyBindings(obj, document.getElementById(prForm));
     }

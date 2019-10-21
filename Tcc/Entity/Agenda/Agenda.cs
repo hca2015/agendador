@@ -8,12 +8,32 @@ namespace Tcc.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal agendaid { get; set; }
+        public int agendaid { get; set; }
         public int empresaid { get; set; }
-        public decimal servicoid { get; set; }
-        public decimal clienteid { get; set; }
+        public int servicoid { get; set; }
+        public int clienteid { get; set; }
         public int horaini { get; set; }
         public int horafim { get; set; }
-        public int JANELA { get; set; }
+        public DateTime dia { get; set; }
+
+        public bool Validate()
+        {
+            if (clienteid < 1)
+                return withoutError(newError("Cliente deve ser informado!"));
+
+            if (servicoid < 1)
+                return withoutError(newError("Servico deve ser informado!"));
+
+            if (horaini < 1)
+                return withoutError(newError("Hora inicio deve ser informado!"));
+
+            if (horafim < 1)
+                return withoutError(newError("Hora fim deve ser informado!"));
+
+            if (empresaid < 1)
+                return withoutError(newError("Empresa deve ser informada!"));
+
+            return withoutError();
+        }
     }
 }

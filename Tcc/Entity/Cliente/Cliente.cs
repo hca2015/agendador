@@ -8,7 +8,7 @@ namespace Tcc.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal clienteid { get; set; }
+        public int clienteid { get; set; }
         public string nome { get; set; }
         public string documento { get; set; }
         public DateTime? datanascimento { get; set; }

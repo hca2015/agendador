@@ -9,22 +9,28 @@ namespace Tcc.Entity
         {
            
         }
-               
+
+        ClienteFixoEmpresa aClienteFixoEmpresa;
+        ClienteFixoEmpresaRepository aClienteFixoEmpresaRepository = new ClienteFixoEmpresaRepository();
         protected override bool PreCondicional()
         {
+
+            if (aClienteFixoEmpresa == null)
+                addErro("Houve um erro com as informações digitadas");
 
             return withoutError();
         }
 
         protected override bool Semantic()
         {
-            
+            aClienteFixoEmpresaRepository.delete(aClienteFixoEmpresa);
 
             return withoutError();
         }
 
         public bool excluir(ClienteFixoEmpresa ClienteFixoEmpresa)
-        {           
+        {
+            aClienteFixoEmpresa = ClienteFixoEmpresa;
 
             execute();
 
