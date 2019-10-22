@@ -9,6 +9,11 @@ namespace Tcc.Apoio
             
         }
 
+        public TaskActivity(GenClass prContextoExecucao)
+            : base (prContextoExecucao)
+        {            
+        }
+
         protected virtual bool PreCondicional()
         {
             return withoutError();

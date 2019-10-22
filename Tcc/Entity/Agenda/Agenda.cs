@@ -10,8 +10,8 @@ namespace Tcc.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int agendaid { get; set; }
         public int empresaid { get; set; }
-        public int servicoid { get; set; }
-        public int clienteid { get; set; }
+        public int? servicoid { get; set; }
+        public int? clienteid { get; set; }
         public int horaini { get; set; }
         public int horafim { get; set; }
         public DateTime dia { get; set; }

@@ -15,6 +15,43 @@ namespace Tcc.Apoio
         {
 
         }
+
+        public GenClass(GenClass prContextoExecucao)
+        {
+            aContextoExecucao = prContextoExecucao;
+        }
+
+        [NotMapped]
+        [JsonIgnore]
+        protected GenClass aContextoExecucao = new GenClass();
+
+        [NotMapped]
+        [JsonIgnore]
+        private Dictionary<string, Modelo> aEntities = new Dictionary<string, Modelo>();
+
+        public void addEntity(string key, Modelo value)
+        {
+            aEntities.Add(key, value);
+        }
+
+        public Empresa getEmpresa()
+        {
+            Modelo emp;
+
+            aEntities.TryGetValue("empresa", out emp);
+
+            return emp == null ? null : (Empresa)emp;
+        }
+
+        public User getUser()
+        {
+            Modelo usr;
+
+            aEntities.TryGetValue("usuario", out usr);
+
+            return usr == null ? null : (User)usr;
+        }
+
         [NotMapped]
         [JsonIgnore]
         protected string getUserId

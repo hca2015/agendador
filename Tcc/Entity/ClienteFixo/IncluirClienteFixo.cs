@@ -10,20 +10,28 @@ namespace Tcc.Entity
            
         }
 
-        ClienteFixoDTO aClienteFixoDTO;
-        ClienteFixoRepository aClienteFixoRepository = new ClienteFixoRepository();
-        ClienteFixoServicoRepository aClienteFixoServicoRepository = new ClienteFixoServicoRepository();
-        ClienteRepository aClienteRepository = new ClienteRepository();
-        ClienteFixoEmpresaRepository aClienteFixoEmpresaRepository = new ClienteFixoEmpresaRepository();
-        IncluirClienteFixoEmpresa aIncluirClienteFixoEmpresa = new IncluirClienteFixoEmpresa();
-        IncluirClienteFixoServico aIncluirClienteFixoServico = new IncluirClienteFixoServico();
-        IncluirCliente aIncluirCliente = new IncluirCliente();
-        ServicoRepository aServicoRepository = new ServicoRepository();
+        private ClienteFixoDTO aClienteFixoDTO;
+        private ClienteFixoRepository aClienteFixoRepository = new ClienteFixoRepository();
+        private ClienteRepository aClienteRepository = new ClienteRepository();
+        private ClienteFixoEmpresaRepository aClienteFixoEmpresaRepository = new ClienteFixoEmpresaRepository();
+        private IncluirClienteFixoEmpresa aIncluirClienteFixoEmpresa = new IncluirClienteFixoEmpresa();
+        private IncluirCliente aIncluirCliente = new IncluirCliente();
+        private ServicoRepository aServicoRepository = new ServicoRepository();
+        private ParametrizacaoAgenda aParametrizacaoAgenda;
+        private ParametrizacaoAgendaRepository aParametrizacaoAgendaRepository = new ParametrizacaoAgendaRepository();
 
         protected override bool PreCondicional()
         {
             if (aClienteFixoDTO == null)
-                addErro("Houve um erro com as informações digitadas.");
+                return withoutError(newError("Houve um erro com as informações digitadas."));
+
+            if(aClienteFixoRepository.getDia(aClienteFixoDTO.empresaid, aClienteFixoDTO.tipofrequencia, aClienteFixoDTO.horario) != null)
+                return withoutError(newError("Já existe um cliente fixo neste horário."));
+
+            aParametrizacaoAgenda = aParametrizacaoAgendaRepository.getEmpresa(aClienteFixoDTO.empresaid);
+
+            if(aParametrizacaoAgenda == null && (aClienteFixoDTO.horario < aParametrizacaoAgenda.HORAINI || aClienteFixoDTO.horario > aParametrizacaoAgenda.HORAFIM))
+                return withoutError(newError("Parametrizacao de agenda não encontrada ou horário fora do intervalo de trabalho."));
 
             return withoutError();
         }
@@ -51,7 +59,7 @@ namespace Tcc.Entity
             {
                 clienteid = cli.clienteid,
                 servicoid = aClienteFixoDTO.servicoid,
-                dataultimopagamento = aClienteFixoDTO.dataultimopagamento,
+                dataultimoservico = aClienteFixoDTO.dataultimoservico,
                 diasemana = (int)aClienteFixoDTO.diasemana,
                 horario = aClienteFixoDTO.horario,
                 tipofrequencia = (int)aClienteFixoDTO.tipofrequencia

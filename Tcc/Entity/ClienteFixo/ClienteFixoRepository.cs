@@ -77,7 +77,7 @@ namespace Tcc.Entity
                 return false;
             }
         }
-                
+
 
         public List<ClienteFixoDTO> getEmpresa(int empresaid)
         {
@@ -90,7 +90,7 @@ namespace Tcc.Entity
                        {
                            clienteid = cli.clienteid,
                            datanascimento = cli.datanascimento,
-                           dataultimopagamento = cfixo.dataultimopagamento,
+                           dataultimoservico = cfixo.dataultimoservico,
                            diasemana = (DayOfWeek)cfixo.diasemana,
                            documento = cli.documento,
                            empresaid = empresaid,
@@ -103,6 +103,68 @@ namespace Tcc.Entity
                        };
 
             return linq.ToList();
+        }
+
+        public ClienteFixoDTO getDia(int empresaid, DateTime prDateTime, int horaini)
+        {
+            var linq = from cfixo in ClienteFixos
+                       join emp in ClienteFixoEmpresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join svc in Servicos on cfixo.servicoid equals svc.servicoid
+                       join cli in Clientes on cfixo.clienteid equals cli.clienteid
+                       where emp.empresaid == empresaid
+                       && cfixo.diasemana == (int)prDateTime.DayOfWeek
+                       && cfixo.horario == horaini
+                       select new ClienteFixoDTO()
+                       {
+                           clienteid = cli.clienteid,
+                           datanascimento = cli.datanascimento,
+                           dataultimoservico = cfixo.dataultimoservico,
+                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           documento = cli.documento,
+                           empresaid = empresaid,
+                           horario = cfixo.horario,
+                           nomecliente = cli.nome,
+                           nomeservico = svc.descricao,
+                           servicoid = svc.servicoid,
+                           tipofrequencia = (ClienteFixo.TipoFrequencia)cfixo.tipofrequencia,
+                           clientefixoid = cfixo.clientefixoid
+                       };
+
+
+            linq = linq.Where(x => x.ValidarUltimoServico());
+
+            return linq.FirstOrDefault();
+        }
+
+        public ClienteFixoDTO getDia(int empresaid, ClienteFixo.TipoFrequencia prFrequencia, int horaini)
+        {
+            var linq = from cfixo in ClienteFixos
+                       join emp in ClienteFixoEmpresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join svc in Servicos on cfixo.servicoid equals svc.servicoid
+                       join cli in Clientes on cfixo.clienteid equals cli.clienteid
+                       where emp.empresaid == empresaid
+                       && cfixo.diasemana == (int)prFrequencia
+                       && cfixo.horario == horaini
+                       select new ClienteFixoDTO()
+                       {
+                           clienteid = cli.clienteid,
+                           datanascimento = cli.datanascimento,
+                           dataultimoservico = cfixo.dataultimoservico,
+                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           documento = cli.documento,
+                           empresaid = empresaid,
+                           horario = cfixo.horario,
+                           nomecliente = cli.nome,
+                           nomeservico = svc.descricao,
+                           servicoid = svc.servicoid,
+                           tipofrequencia = (ClienteFixo.TipoFrequencia)cfixo.tipofrequencia,
+                           clientefixoid = cfixo.clientefixoid
+                       };
+
+
+            //linq = linq.Where(x => x.ValidarUltimoServico());
+
+            return linq.FirstOrDefault();
         }
     }
 }

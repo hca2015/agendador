@@ -75,10 +75,21 @@ namespace Tcc.Entity
         public ParametrizacaoAgenda getUser(int id)
         {
             IQueryable<ParametrizacaoAgenda> linq = from pa in ParametrizacaoAgendas
-                       join ep in Empresas on pa.empresaid equals ep.empresaid
-                       join epu in EmpresaUsers on ep.empresaid equals epu.empresaid
-                       where epu.userid == id
-                       select pa;
+                                                    join ep in Empresas on pa.empresaid equals ep.empresaid
+                                                    join epu in EmpresaUsers on ep.empresaid equals epu.empresaid
+                                                    where epu.userid == id
+                                                    select pa;
+
+            return linq.FirstOrDefault();
+        }
+
+        public ParametrizacaoAgenda getEmpresa(int id)
+        {
+            IQueryable<ParametrizacaoAgenda> linq = from pa in ParametrizacaoAgendas
+                                                    join ep in Empresas on pa.empresaid equals ep.empresaid
+                                                    join epu in EmpresaUsers on ep.empresaid equals epu.empresaid
+                                                    where ep.empresaid == id
+                                                    select pa;
 
             return linq.FirstOrDefault();
         }

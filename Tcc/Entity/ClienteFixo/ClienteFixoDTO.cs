@@ -10,9 +10,9 @@ namespace Tcc.Entity
         [Key]
         public int clientefixoid { get; set; }
         public int? clienteid { get; set; }
-        [DisplayName("Último pagamento")]
+        [DisplayName("Último serviço")]
         [DataType(DataType.Date)]       
-        public DateTime? dataultimopagamento { get; set; }
+        public DateTime? dataultimoservico { get; set; }
         [DisplayName("Dia da semana")]
         [EnumDataType(typeof(DayOfWeek))]
         public DayOfWeek diasemana { get; set; }
@@ -37,5 +37,35 @@ namespace Tcc.Entity
         [DataType(DataType.Text)]
         public string nomeservico { get; set; }
         public int empresaid { get; set; }
+
+        public bool ValidarUltimoServico()
+        {
+            bool buscar = false;
+
+            if (dataultimoservico.HasValue)
+            {
+                switch (tipofrequencia)
+                {
+                    case ClienteFixo.TipoFrequencia.Diario:
+                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 1;
+                        break;
+                    case ClienteFixo.TipoFrequencia.Semanal:
+                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 7;
+                        break;
+                    case ClienteFixo.TipoFrequencia.Quinzenal:
+                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 15;
+                        break;
+                    case ClienteFixo.TipoFrequencia.Mensal:
+                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 30;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+                buscar = true;
+
+            return buscar;
+        }
     }
 }

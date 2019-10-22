@@ -70,13 +70,9 @@ namespace Tcc.Entity
             }
         }
 
-        /*public List<Agenda> getData(DateTime prData)
+        public List<AgendaDTO> getAgendaDTO(DateTime prData)
         {
-            IQueryable<Agenda> linq = from ag in Agendas
-                       where ag.JANELA.ToShortDateString() == prData.ToShortDateString()
-                       select ag;
-
-            return linq.ToList();
-        }*/
+            return new List<AgendaDTO>();
+        }
     }
 }

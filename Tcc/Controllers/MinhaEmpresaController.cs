@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Tcc.Entity;
 
@@ -12,6 +13,7 @@ namespace Tcc.Controllers
         {
             ViewBag.data = DateTime.Now.ToShortDateString();
             ViewBag.parametrizacao = getParametrizacao();
+            ViewBag.agenda = getCreateAgenda();
             return View();
         }
 
@@ -53,30 +55,32 @@ namespace Tcc.Controllers
            
             return aContextoExecucao.withError() ? Json(aContextoExecucao.Messages) : Json(lRetorno);
         }
-                
-        //public JsonResult getCreateDados(string prData)
-        //{
-        //    PARAMETRIZACAOAGENDA lRetorno = null;
+        
+        public List<AgendaDTO> getCreateAgenda()
+        {
+            AgendaRepository lAgendaRepository = new AgendaRepository();
+            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(DateTime.Now.Date);
 
-        //    if (prParametrizacaoAgenda.PARAMETRIZACAOAGENDAID == 0)
-        //    {
-        //        IncluirParametrizacaoAgenda lIncluirParametrizacaoAgenda = new IncluirParametrizacaoAgenda();
+            if (lRetorno.Count == 0) {
+                CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
+                lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+            }
 
-        //        if (!lIncluirParametrizacaoAgenda.incluir(prParametrizacaoAgenda))
-        //            aContextoExecucao.add(lIncluirParametrizacaoAgenda.Messages);
-        //    }
-        //    else
-        //    {
-        //        AlterarParametrizacaoAgenda lAlterarParametrizacaoAgenda = new AlterarParametrizacaoAgenda();
+            return lRetorno;
+        }
 
-        //        if (!lAlterarParametrizacaoAgenda.alterar(prParametrizacaoAgenda))
-        //            aContextoExecucao.add(lAlterarParametrizacaoAgenda.Messages);
-        //    }
+        public JsonResult getCreateAgenda(DateTime prData)
+        {
+            AgendaRepository lAgendaRepository = new AgendaRepository();
+            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(prData);
 
-        //    if (aContextoExecucao.withoutError())
-        //        lRetorno = prParametrizacaoAgenda;
+            if (lRetorno.Count == 0)
+            {
+                CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
+                lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+            }
 
-        //    return aContextoExecucao.withError() ? Json(aContextoExecucao.Messages) : Json(lRetorno);
-        //}
+            return Json(lRetorno);
+        }
     }
 }

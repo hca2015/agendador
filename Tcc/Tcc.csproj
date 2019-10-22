@@ -188,6 +188,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Entity\Agenda\AgendaDTO.cs" />
+    <Compile Include="Entity\Agenda\CriarAgendaAutomatica.cs" />
     <Compile Include="Entity\Agenda\EditarAgenda.cs" />
     <Compile Include="Entity\Agenda\IncluirAgenda.cs" />
     <Compile Include="Entity\Apoio\ContextoExecucao.cs" />
@@ -200,11 +201,6 @@
     <Compile Include="Entity\Users\EditarUsers.cs" />
     <Compile Include="Entity\Users\ExcluirUsers.cs" />
     <Compile Include="Entity\Users\IncluirUsers.cs" />
-    <Compile Include="Entity\ClienteFixoServico\ClienteFixoServico.cs" />
-    <Compile Include="Entity\ClienteFixoServico\ClienteFixoServicoRepository.cs" />
-    <Compile Include="Entity\ClienteFixoServico\EditarClienteFixoServico.cs" />
-    <Compile Include="Entity\ClienteFixoServico\ExcluirClienteFixoServico.cs" />
-    <Compile Include="Entity\ClienteFixoServico\IncluirClienteFixoServico.cs" />
     <Compile Include="Entity\ClienteFixoEmpresa\ClienteFixoEmpresa.cs" />
     <Compile Include="Entity\ClienteFixoEmpresa\ClienteFixoEmpresaRepository.cs" />
     <Compile Include="Entity\ClienteFixoEmpresa\EditarClienteFixoEmpresa.cs" />
@@ -224,7 +220,6 @@
     <Compile Include="Entity\ParametrizacaoAgenda\IncluirParametrizacaoAgenda.cs" />
     <Compile Include="Entity\Agenda\Agenda.cs" />
     <Compile Include="Entity\Agenda\AgendaRepository.cs" />
-    <Compile Include="Entity\Agenda\getCreateAgenda.cs" />
     <Compile Include="Entity\Apoio\GenClass.cs" />
     <Compile Include="Entity\Apoio\IContext.cs" />
     <Compile Include="Entity\Apoio\Message.cs" />

@@ -55,7 +55,7 @@ namespace Tcc.Controllers
 
         [NotMapped]
         [JsonIgnore]
-        private GenClass _ContextoExecucao;
+        private GenClass _ContextoExecucao = null;
         [NotMapped]
         [JsonIgnore]
         public GenClass aContextoExecucao
@@ -63,7 +63,11 @@ namespace Tcc.Controllers
             get
             {
                 if (_ContextoExecucao == null)
+                {
                     _ContextoExecucao = new GenClass();
+                    _ContextoExecucao.addEntity("empresa", empresa);
+                    _ContextoExecucao.addEntity("usuario", usuario);
+                }
 
                 return _ContextoExecucao;
             }

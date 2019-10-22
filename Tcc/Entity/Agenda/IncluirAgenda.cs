@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using Tcc.Apoio;
 
 namespace Tcc.Entity
@@ -24,8 +24,8 @@ namespace Tcc.Entity
         }
 
         protected override bool Semantic()
-        {
-            if(!aAgendaRepository.add(aAgenda))
+        {            
+            if (!aAgendaRepository.add(aAgenda))
                 addErro("Erro ao inserir as entradas!");
 
             return withoutError();
