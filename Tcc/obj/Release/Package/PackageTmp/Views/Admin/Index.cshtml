@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Tcc.Models.ApplicationUser>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, null)
 </p>
 <table class="table">
     <tr>
@@ -77,9 +77,9 @@
             @Html.DisplayFor(modelItem => item.UserName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edit", "Edit", null, new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", null, new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", null, new { id=item.Id })
         </td>
     </tr>
 }

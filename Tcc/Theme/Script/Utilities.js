@@ -34,7 +34,17 @@ var updateDTO = function (prTo, prFrom) {
             if (typeof prTo[lpropName] === 'function')
                 prTo[lpropName](lvalueFrom === "" || lvalueFrom == null | lvalueFrom === "null" ? "" : lvalueFrom);
             else
-                prTo[lpropName] = lvalueFrom == "null" || lvalueFrom == null ? "" : lvalueFrom
+                if (typeof prTo[lpropName] === 'object') {
+                    //updateDTO(prTo[lpropName], prFrom[lpropName]);
+                    Object.keys(prTo[lpropName]).forEach(
+                        (item) => {
+                            if (prFrom[lpropName][item])
+                                updateDTO(prTo[lpropName][item](), prFrom[lpropName][item]);
+                        }
+                    ) 
+                }
+                else
+                    prTo[lpropName] = lvalueFrom == "null" || lvalueFrom == null ? "" : lvalueFrom;
         }
     }
 }
@@ -102,4 +112,10 @@ var tratarRetorno = function (prRetorno, f) {
             return true;
         }
     }
+}
+
+function JsonObjectRequestBean(prJsonObject) {
+    var obj = this;
+
+    this.JSONOBJECT = ko.mapping.toJSON(ko.mapping.toJS(prJsonObject));
 }

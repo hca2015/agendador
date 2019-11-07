@@ -36,7 +36,8 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Telefone, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Telefone, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Telefone, new { type = "number", @class = "form-control", placeholder = "(DDD) 9XXXX-XXXX" })
+            <p style="color: red">* O número de telefone é o mecanismo para recuperação de senha, inserir um número que você tenha acesso.</p>
         </div>
     </div>
 

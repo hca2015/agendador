@@ -21,9 +21,9 @@ namespace Tcc.Apoio
             aContextoExecucao = prContextoExecucao;
         }
 
-        [NotMapped]
-        [JsonIgnore]
-        protected GenClass aContextoExecucao = new GenClass();
+        //[NotMapped]
+        //[JsonIgnore]
+        protected GenClass aContextoExecucao;
 
         [NotMapped]
         [JsonIgnore]
@@ -112,6 +112,19 @@ namespace Tcc.Apoio
                         return false;
                 }
             }
+
+            if(aContextoExecucao != null)
+            {
+                if (aContextoExecucao.Messages.Count > 0)
+                {
+                    foreach (Message item in aContextoExecucao.Messages)
+                    {
+                        if (item.messageType == Message.kdType.Error)
+                            return false;
+                    }
+                }
+            }
+
             return true;
         }
         public virtual bool withError()

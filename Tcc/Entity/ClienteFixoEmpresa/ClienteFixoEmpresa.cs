@@ -8,8 +8,8 @@ namespace Tcc.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public decimal clientefixoempresaid { get; set; }
-        public decimal empresaid { get; set; }
+        public int clientefixoempresaid { get; set; }
+        public int empresaid { get; set; }
         public int clientefixoid { get; set; }
     }
 }

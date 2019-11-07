@@ -3,12 +3,55 @@
     var aMinhaEmpresa = null;
     var data = "@ViewBag.data";
     var parametrizacao = @Html.Raw(ViewBag.parametrizacao);
+    var agenda = @Html.Raw(ViewBag.agenda);
 
     $(document).ready(function () {
         aMinhaEmpresa = new MinhaEmpresa();
-        aMinhaEmpresa.inicializar("secMinhaEmpresa", data, parametrizacao);
+        aMinhaEmpresa.inicializar("secMinhaEmpresa", data, parametrizacao, agenda);
+
+        autocomplete(document.getElementById("nomeservico"), '/servico/searchservico',
+            (data) => {
+                aMinhaEmpresa.aAgendaSelecionada().servico().servicoid(data.id);
+                aMinhaEmpresa.aAgendaSelecionada().servico().descricao(data.label);
+                aMinhaEmpresa.aAgendaSelecionada().servico().empresaid(0);
+                aMinhaEmpresa.aAgendaSelecionada().servico().valorservico(0);
+            },
+            () => {
+                document.getElementById('nomeservico').value = '';
+                document.getElementById('servicoid').value = '';
+            }
+        );
+
+        autocomplete(document.getElementById("documento"), '/cliente/searchdocumento',
+            (data) => {
+                aMinhaEmpresa.aAgendaSelecionada().cliente().clienteid(data.id);
+
+                let dataEditar = new Date(data.nascimento);
+                aMinhaEmpresa.aAgendaSelecionada().cliente().datanascimento(`${dataEditar.getFullYear()}-${dataEditar.getMonth() + 1 >= 10 ? dataEditar.getMonth() + 1 : '' + dataEditar.getMonth() + 1}-${dataEditar.getDate()}`);
+                document.getElementById('datanascimento').value = `${dataEditar.getFullYear()}-${dataEditar.getMonth() + 1 >= 10 ? dataEditar.getMonth() + 1 : '' + dataEditar.getMonth() + 1}-${dataEditar.getDate()}`;
+                
+                aMinhaEmpresa.aAgendaSelecionada().cliente().nomecliente(data.name);
+                aMinhaEmpresa.aAgendaSelecionada().cliente().documento(data.documento);
+
+                //document.getElementById('nomecliente').value = data.name;
+                //document.getElementById('documento').value = data.documento;
+
+                if (data.id > 0) {
+                    document.getElementById('nomecliente').setAttribute('disabled', 'true');
+                    document.getElementById('datanascimento').setAttribute('disabled', 'true');
+                }
+            },
+            () => {
+                document.getElementById('clienteid').value = '';
+                document.getElementById('nomecliente').value = '';
+                document.getElementById('documento').value = '';
+                document.getElementById('datanascimento').value = '';
+
+                document.getElementById('nomecliente').removeAttribute('disabled');
+                document.getElementById('datanascimento').removeAttribute('disabled');
+            }
+        );
     });
-    
 </script>
 
 <section style="margin-top:25px;" id="secMinhaEmpresa">
@@ -20,32 +63,45 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            <th scope="auto">
                                 #
                             </th>
-                            <th scope="col">
+                            <th scope="auto">
                                 Quem
                             </th>
-                            <th scope="col">
+                            <th scope="auto">
                                 O que
                             </th>
-                            <th scope="col">
+                            <th scope="auto">
                                 Quando
+                            </th>
+                            <th scope="auto" style="width: 40%">
+                                Ações
                             </th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: HORARIOAGENDA">
+                    <tbody data-bind="foreach: acoAgenda">
                         <tr>
                             <td scope="row" data-bind="text: $index"></td>
-                            <td data-bind="text: NOME"><!--Nome--></td>
-                            <td data-bind="text: SERVICO"><!--Serviço--></td>
-                            <td data-bind="text: HORA"><!--Data--></td>
+                            <td data-bind="text: cliente == null ? '' : cliente().nomecliente"><!--Nome--></td>
+                            <td data-bind="text: servico == null ? '' : servico().descricao"><!--Serviço--></td>
+                            <td data-bind="text: agenda().horaini() + ' - ' + agenda().horafim()"><!--Data--></td>
+                            <td style="width: 40%">
+                                <button data-toggle="modal" data-target="#editarAgenda" data-bind="click: $parent.selecionarAgenda"
+                                        class="btn btn-outline-info">
+                                    Editar&nbsp;&nbsp;&nbsp;<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                                <button data-toggle="modal" data-target="#editarAgenda" data-bind="click: $parent.selecionarAgendaLimpar"
+                                        class="btn btn-outline-danger">
+                                    Limpar&nbsp;&nbsp;<i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
+        <!--Painel lateral-->
         <div class="col-lg-4">
             <div class="jumbotron" style="padding: 30px">
                 <!--Escolher dia-->
@@ -76,7 +132,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Parametrização agenda -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" data-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -106,6 +162,84 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Editar/Limpar agenda -->
+    <div class="modal fade" id="editarAgenda" tabindex="-1" role="dialog" aria-labelledby="editarAgendaCenterTitle" data-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="width: 1200px" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarAgendaCenterTitle" data-bind="text: aAcao() == 0 ? 'Alterar' : 'Limpar'"></h5>
+                    <button type="button" id="closeModalEditarAgenda" class="close" data-bind="click: clearAgenda" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" data-bind="visible: aAcao() == 0">
+                    <form autocomplete="off">
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Documento</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="autocomplete">
+                                    <input type="text" id="documento" class="form-control" data-bind="value: aAgendaSelecionada().cliente().documento" placeholder="Documento">
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <input type="hidden" id="clienteid" data-bind="value: aAgendaSelecionada().cliente().clienteid" />
+                            <div class="col">
+                                <label>Cliente</label>
+                                <input type="text" id="nomecliente" class="form-control" data-bind="value: aAgendaSelecionada().cliente().nomecliente" placeholder="Nome cliente">
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Data de nascimento (Cliente)</label>
+                                <input type="date" id="datanascimento" data-bind="value: aAgendaSelecionada().cliente().datanascimento" class="form-control" placeholder="Data de Nascimento (Cliente)">
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col">
+                                <label>Servico: </label>
+                                <input type="hidden" id="servicoid" data-bind="value: aAgendaSelecionada().servico().servicoid" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="autocomplete">
+                                    <input id="nomeservico" class="form-control" data-bind="value: aAgendaSelecionada().servico().descricao" type="text" placeholder="Servico">
+                                    <input style="display:none;" type="submit">
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </form>
+                    <div style="margin-top: 8px;" class="modal-footer">
+                        <button type="submit" data-bind="click: salvarAgenda" class="btn btn-outline-success">Salvar</button>
+                    </div>
+                </div>
+
+                <div class="modal-body" data-bind="visible: aAcao() == 1">
+                    <button type="submit" data-bind="click: clearAgenda" data-dismiss="modal" aria-label="Close" class="btn btn-outline-success">Não</button>
+                    <button type="button" data-bind="click: limparAgenda" class="btn btn-outline-danger">Sim</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 

@@ -47,6 +47,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.3.103.56\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.SimpleNotificationService, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.SimpleNotificationService.3.3.101.80\lib\net45\AWSSDK.SimpleNotificationService.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -190,12 +196,16 @@
     <Compile Include="Entity\Agenda\AgendaDTO.cs" />
     <Compile Include="Entity\Agenda\CriarAgendaAutomatica.cs" />
     <Compile Include="Entity\Agenda\EditarAgenda.cs" />
+    <Compile Include="Entity\Agenda\EditarAgendaCompleta.cs" />
     <Compile Include="Entity\Agenda\IncluirAgenda.cs" />
+    <Compile Include="Entity\Agenda\LimparAgenda.cs" />
     <Compile Include="Entity\Apoio\ContextoExecucao.cs" />
+    <Compile Include="Entity\Apoio\CustomJsonResult.cs" />
     <Compile Include="Entity\ClienteFixo\ClienteFixoDTO.cs" />
     <Compile Include="Entity\Empresa\EditarEmpresa.cs" />
     <Compile Include="Entity\Users\AspNetUsers.cs" />
     <Compile Include="Entity\Users\DesvincularUser.cs" />
+    <Compile Include="Entity\Users\EnviarSMSSenha.cs" />
     <Compile Include="Entity\Users\Users.cs" />
     <Compile Include="Entity\Users\UsersRepository.cs" />
     <Compile Include="Entity\Users\EditarUsers.cs" />
@@ -367,6 +377,7 @@
     <Content Include="Theme\App.css" />
     <Content Include="Theme\Script\Cliente\Cliente.js" />
     <Content Include="Theme\Script\Manage\MinhaConta.js" />
+    <Content Include="Theme\Script\MinhaEmpresa\AgendaDTO.js" />
     <Content Include="Theme\Script\MinhaEmpresa\ParametrizacaoEmpresa.js" />
     <Content Include="Scripts\plugins.js" />
     <Content Include="Theme\Script\Servico\Servico.js" />
@@ -451,6 +462,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.SimpleNotificationService.3.3.101.80\analyzers\dotnet\cs\AWSSDK.SimpleNotificationService.CodeAnalysis.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

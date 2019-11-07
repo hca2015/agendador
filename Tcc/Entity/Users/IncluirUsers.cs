@@ -22,6 +22,8 @@ namespace Tcc.Entity
 
         protected override bool Semantic()
         {
+            aUser.telefone = aUser.telefone.Trim().removerCaracteresEspeciais();
+
             UsersRepository lUsersRepository = new UsersRepository();
             if(!lUsersRepository.add(aUser))
                 addErro("Houve um erro ao incluir o usuário");

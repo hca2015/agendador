@@ -15,6 +15,7 @@ namespace Tcc.Entity
             aParametrizacaoAgendaRepository = new ParametrizacaoAgendaRepository();
             aIncluirAgenda = new IncluirAgenda();
             aClienteFixoRepository = new ClienteFixoRepository();
+            aAgendaRepository = new AgendaRepository();
         }
 
         public List<AgendaDTO> acoAgendaDTO;
@@ -25,14 +26,15 @@ namespace Tcc.Entity
         private IncluirAgenda aIncluirAgenda;
         private DateTime aData;
         private ClienteFixoRepository aClienteFixoRepository;
+        private AgendaRepository aAgendaRepository;
         protected override bool PreCondicional()
         {
-            aEmpresa = getEmpresa();
+            aEmpresa = aContextoExecucao.getEmpresa();
 
             if (aEmpresa == null)
                 return withoutError(newError("Não existe empresa associada."));
 
-            aUser = getUser();
+            aUser = aContextoExecucao.getUser();
 
             if (aUser == null)
                 return withoutError(newError("Não foi possível capturar o usuário conectado, tente novamente."));
@@ -50,7 +52,7 @@ namespace Tcc.Entity
             Agenda lAgenda;
             ClienteFixoDTO cfixo;
 
-            for (int i = aParametrizacaoAgenda.HORAINI; i <= aParametrizacaoAgenda.HORAFIM; i++)
+            for (int i = aParametrizacaoAgenda.HORAINI; i < aParametrizacaoAgenda.HORAFIM; i++)
             {
                 cfixo = aClienteFixoRepository.getDia(aEmpresa.empresaid, aData, i);
 
@@ -64,12 +66,19 @@ namespace Tcc.Entity
                     servicoid = cfixo == null ? null : (int?)cfixo.servicoid,
                 };
 
+                if (cfixo != null)
+                    cfixo.setUltimaConsulta(aData);
+
                 if(!aIncluirAgenda.incluir(lAgenda))
                 {
                     addErro("Houve um erro ao criar as agendas");
+                    acoAgendaDTO = new List<AgendaDTO>();
                     break;
                 }
             }   
+
+            if(withoutError())
+                acoAgendaDTO = aAgendaRepository.getAgendaDTO(aData);
 
             return withoutError();
         }

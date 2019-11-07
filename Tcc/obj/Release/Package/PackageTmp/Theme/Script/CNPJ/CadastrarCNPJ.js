@@ -17,28 +17,22 @@
     }
 
     this.buscarReceita = function () {
-        $.ajax({
-            type: "POST",
+        server({            
             url: "/CNPJ/cnpjReceita",
-            data: { cnpj: obj.CNPJ() },
-            success: obj.retorno,
-            error: handleNotifications,
-            dataType: "text"
-        });
+            jsonObject: { cnpj: obj.CNPJ() },
+            onSuccess: obj.retorno,
+        }).request();
     }
         
     this.retorno = function (dado) {      
-        updateDTO(obj, ko.mapping.fromJSON(dado));
+        updateDTO(obj, dado);
     }
 
     this.cadastrarEmpresa = function () {
-        $.ajax({
-            type: "POST",
+        server({
             url: "/CNPJ/cadastrarEmpresa",
-            data: getJsonObject(obj),
-            success: function (dado) { toastr.success("Cadastrado com Sucesso.") },
-            error: handleNotifications
-            //dataType: "text"
-        });
+            jsonObject: getJsonObject(obj),
+            onSuccess: function (dado) { window.location = '/Manage/Index'; },
+        }).request();
     }
 }

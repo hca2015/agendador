@@ -1,0 +1,75 @@
+﻿@model Tcc.Entity.ClienteFixoDTO
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ClienteFixoDTO</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nomecliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nomecliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.datanascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.datanascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nomeservico)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nomeservico)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dataultimopagamento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dataultimopagamento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipofrequencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipofrequencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horario)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.clienteid }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

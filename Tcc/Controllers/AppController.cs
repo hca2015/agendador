@@ -30,7 +30,7 @@ namespace Tcc.Controllers
             get
             {                
                 return System.Web.HttpContext.Current.User.Identity.GetUserId();
-            }
+            }           
         }
 
         [NotMapped]
@@ -39,7 +39,10 @@ namespace Tcc.Controllers
         {
             get
             {                
-                return (new UsersRepository().GetUserId(membershipId));
+                if(membershipId != null)
+                    return (new UsersRepository().GetUserId(membershipId));
+
+                return null;
             }
         }
 
@@ -49,7 +52,10 @@ namespace Tcc.Controllers
         {
             get
             {
-                return (new EmpresaRepository().getUser(usuario.userid));
+                if (membershipId != null)
+                    return (new EmpresaRepository().getUser(usuario.userid));
+
+                return null;
             }
         }
 
@@ -62,11 +68,13 @@ namespace Tcc.Controllers
         {
             get
             {
-                if (_ContextoExecucao == null)
+                if (_ContextoExecucao == null || _ContextoExecucao.getEmpresa() == null)
                 {
                     _ContextoExecucao = new GenClass();
-                    _ContextoExecucao.addEntity("empresa", empresa);
-                    _ContextoExecucao.addEntity("usuario", usuario);
+                    if(empresa != null)
+                        _ContextoExecucao.addEntity("empresa", empresa);
+                    if(usuario != null)
+                        _ContextoExecucao.addEntity("usuario", usuario);
                 }
 
                 return _ContextoExecucao;

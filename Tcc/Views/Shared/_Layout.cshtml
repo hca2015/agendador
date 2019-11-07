@@ -13,8 +13,22 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
     <script src="~/Scripts/plugins.js"></script>
-    @Scripts.Render("~/bundle/Tcc/js")    
-    <script>$('input').attr('autocomplete', 'off');</script>
+    @Scripts.Render("~/bundle/Tcc/js")
+    <script>
+    $('input').attr('autocomplete', 'off');
+        $('form').attr('autocomplete', 'off');</script>
+    @*<script type="text/javascript">
+            $.ajaxSetup({
+                beforeSend: function () {
+                    document.getElementById('_loader').hidden = false;
+                    $(document.body).append('<div id="overlay"></div>');
+                },
+                complete: function () {
+                    document.getElementById('_loader').hidden = true;
+                    document.getElementById("overlay").remove();
+                }
+            })
+        </script>*@
 </head>
 
 <body style="padding:0px;">

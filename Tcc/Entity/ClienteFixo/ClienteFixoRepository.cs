@@ -113,7 +113,7 @@ namespace Tcc.Entity
                        join cli in Clientes on cfixo.clienteid equals cli.clienteid
                        where emp.empresaid == empresaid
                        && cfixo.diasemana == (int)prDateTime.DayOfWeek
-                       && cfixo.horario == horaini
+                       && cfixo.horario == horaini                                             
                        select new ClienteFixoDTO()
                        {
                            clienteid = cli.clienteid,
@@ -131,9 +131,11 @@ namespace Tcc.Entity
                        };
 
 
-            linq = linq.Where(x => x.ValidarUltimoServico());
+            List<ClienteFixoDTO> all =  linq.ToList();
 
-            return linq.FirstOrDefault();
+            var result = all.Where(x => x.ValidarUltimoServico()).FirstOrDefault();
+
+            return result;
         }
 
         public ClienteFixoDTO getDia(int empresaid, ClienteFixo.TipoFrequencia prFrequencia, int horaini)

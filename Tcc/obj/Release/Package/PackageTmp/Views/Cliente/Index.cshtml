@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Tcc.Entity.ClienteFixoDTO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Meus clientes fixos</h2>
+
+<p>
+    @Html.ActionLink("Criar novo", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nomecliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.datanascimento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.documento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasemana)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipofrequencia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.horario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nomeservico)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.nomecliente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.datanascimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.documento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.diasemana)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tipofrequencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.horario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nomeservico)
+            </td>
+            <td>
+                @*@Html.ActionLink("Editar", "Edit", new { id = item.clienteid }) |*@
+                @Html.ActionLink("Apagar", "Delete", new { id = item.clienteid })
+            </td>
+        </tr>
+    }
+
+</table>

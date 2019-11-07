@@ -1,82 +1,71 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendador</title>
+
+    <script src="https://use.fontawesome.com/b458853859.js"></script>
+    <link href="~/Theme/App.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/plugins.js"></script>
     @Scripts.Render("~/bundle/Tcc/js")
-
+    <script>
+    $('input').attr('autocomplete', 'off');
+        $('form').attr('autocomplete', 'off');</script>
+    @*<script type="text/javascript">
+            $.ajaxSetup({
+                beforeSend: function () {
+                    document.getElementById('_loader').hidden = false;
+                    $(document.body).append('<div id="overlay"></div>');
+                },
+                complete: function () {
+                    document.getElementById('_loader').hidden = true;
+                    document.getElementById("overlay").remove();
+                }
+            })
+        </script>*@
 </head>
 
 <body style="padding:0px;">
     <nav class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
 
-        @Html.ActionLink("Agendador", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        @Html.ActionLink("Agendador", "Index", "Home", null, new { @class = "navbar-brand" })
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item">@Html.ActionLink("Início", "Index", "Home", new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Sobre", "About", "Home", new { @class = "nav-link" })</li>
-                <li class="nav-item">@Html.ActionLink("Contato", "Contact", "Home", new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Início", "Index", "Home", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Sobre", "About", "Home", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Contato", "Contact", "Home", null, new { @class = "nav-link" })</li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Gerenciar Empresa
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/MinhaEmpresa/MinhaEmpresa">Minha Empresa</a>                    
-    @*@Html.ActionLink("Minha Empresa", "MinhaEmpresa", "MinhaEmpresa", new { @class = "dropdown-item" })*@
-                        @Html.ActionLink("Cadastrar Empresa", "CadastrarCNPJ", "CNPJ", new { @class = "dropdown-item" })
-                    </div>
-                </li>
+                @*<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Gerenciar Empresa
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/MinhaEmpresa/MinhaEmpresa">Minha Empresa</a>
+                            @Html.ActionLink("Cadastrar Empresa", "CadastrarCNPJ", "CNPJ", null, new { @class = "dropdown-item" })
+                        </div>
+                    </li>*@
+
+                <li class="nav-item">@Html.ActionLink("Cadastrar empresa", "CadastrarCNPJ", "CNPJ", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Agenda", "MinhaEmpresa", "MinhaEmpresa", null, new { @class = "nav-link" })</li>
             </ul>
             @Html.Partial("_LoginPartial")
         </div>
     </nav>
 
-    @*<div class="navbar navbar-dark bg-dark">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Agendador", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
+    <div class="alert alert-primary" hidden id="_loader" style="display:flex; margin:0px;">
+        <p>Carregando...</p><div style="margin-left:20px;" class="loader"></div>
+    </div>
 
 
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Gerenciar Empresa
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li>@Html.ActionLink("Minha Empresa", "MinhaEmpresa", "MinhaEmpresa")</li>
-                                <li>@Html.ActionLink("Cadastrar Empresa", "CadastrarCNPJ", "CNPJ")</li>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                }
-                            </ul>
-                        </li>
-
-                        @if (User.IsInRole("ADMIN"))
-                        {
-                            <li>@Html.ActionLink("Painel ADM", "PainelAdm", "Admin")</li>
-                        }
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
-
-    <div class="container body-content">
+    <div class="container body-content" style="margin-top:40px;">
         @RenderBody()
         <hr />
         <footer>
@@ -90,3 +79,13 @@
     <script src="~/Scripts/knockout-mapping.js"></script>
 </body>
 </html>
+
+<style>
+    /*body {
+        background-color: #f2ffff;
+        background-color: #4a4a49;
+    }
+    input{
+        background-color: #4a4a49;
+    }*/
+</style>

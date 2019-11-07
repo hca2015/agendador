@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -9,11 +10,21 @@ namespace Tcc.Controllers
     [Authorize]
     public class MinhaEmpresaController : AppController
     {
-        public ActionResult MinhaEmpresa()
+        //private const string _dateFormat = "dd-MM-yyyy HH:mm:ss";
+        private const string _dateFormat = "yyyy-MM-dd HH:mm:ss";
+        public ActionResult MinhaEmpresa(DateTime? prData = null)
         {
-            ViewBag.data = DateTime.Now.ToShortDateString();
+            if(!prData.HasValue)
+                ViewBag.data = DateTime.Now.ToShortDateString();
+            else
+                ViewBag.data = prData.Value.ToShortDateString();
+
             ViewBag.parametrizacao = getParametrizacao();
-            ViewBag.agenda = getCreateAgenda();
+
+            var isoConvert = new IsoDateTimeConverter();
+            isoConvert.DateTimeFormat = _dateFormat;
+
+            ViewBag.agenda = JsonConvert.SerializeObject(getCreateAgenda(prData), isoConvert);
             return View();
         }
 
@@ -27,7 +38,7 @@ namespace Tcc.Controllers
 
             if (lRetorno == null)
                 aContextoExecucao.addMessage("Parametrização de horários não encontrada! Incluir nova!", Message.kdType.Info);
-                        
+
             return aContextoExecucao.withErrororWarn() ? JsonConvert.SerializeObject(aContextoExecucao.Messages) : JsonConvert.SerializeObject(lRetorno);
         }
 
@@ -39,48 +50,109 @@ namespace Tcc.Controllers
             {
                 IncluirParametrizacaoAgenda lIncluirParametrizacaoAgenda = new IncluirParametrizacaoAgenda();
 
-                if(!lIncluirParametrizacaoAgenda.incluir(prParametrizacaoAgenda))
+                if (!lIncluirParametrizacaoAgenda.incluir(prParametrizacaoAgenda))
                     aContextoExecucao.add(lIncluirParametrizacaoAgenda.Messages);
             }
             else
             {
                 AlterarParametrizacaoAgenda lAlterarParametrizacaoAgenda = new AlterarParametrizacaoAgenda();
 
-                if(!lAlterarParametrizacaoAgenda.alterar(prParametrizacaoAgenda))
+                if (!lAlterarParametrizacaoAgenda.alterar(prParametrizacaoAgenda))
                     aContextoExecucao.add(lAlterarParametrizacaoAgenda.Messages);
             }
 
             if (aContextoExecucao.withoutError())
                 lRetorno = prParametrizacaoAgenda;
-           
+
             return aContextoExecucao.withError() ? Json(aContextoExecucao.Messages) : Json(lRetorno);
         }
-        
-        public List<AgendaDTO> getCreateAgenda()
-        {
-            AgendaRepository lAgendaRepository = new AgendaRepository();
-            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(DateTime.Now.Date);
 
-            if (lRetorno.Count == 0) {
+        public List<AgendaDTO> getCreateAgenda(DateTime? prData = null)
+        {
+            DateTime lData = prData == null ? DateTime.Now.Date : prData.Value.Date;
+            //REMOVER***************************************************************************
+            lData = new DateTime(2019, 10, 23);
+
+            AgendaRepository lAgendaRepository = new AgendaRepository();
+            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(lData);
+
+            if (lRetorno.Count == 0)
+            {
                 CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
+                lCriarAgendaAutomatica.criar(DateTime.Now.Date);
                 lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+            }
+
+            foreach (var item in lRetorno)
+            {
+                if (item.cliente != null && item.cliente.datanascimento.HasValue)
+                    item.cliente.datanascimento = item.cliente.datanascimento.Value.Date;
+                if (item.cliente != null && item.cliente.dataultimoservico.HasValue)
+                    item.cliente.dataultimoservico = item.cliente.dataultimoservico.Value.Date;
             }
 
             return lRetorno;
         }
 
-        public JsonResult getCreateAgenda(DateTime prData)
+        public JsonResult getCreateAgendaData(string prData)
         {
-            AgendaRepository lAgendaRepository = new AgendaRepository();
-            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(prData);
+            DateTime lData;
+            List<AgendaDTO> lRetorno = new List<AgendaDTO>();
 
-            if (lRetorno.Count == 0)
+            if (DateTime.TryParse(prData, out lData))
             {
-                CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
-                lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+                //REMOVER***************************************************************************
+                lData = new DateTime(2019, 10, 23);
+
+                AgendaRepository lAgendaRepository = new AgendaRepository();
+                lRetorno = lAgendaRepository.getAgendaDTO(lData);
+
+                if (lRetorno.Count == 0)
+                {
+                    CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
+                    lCriarAgendaAutomatica.criar(lData);
+                    lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+                }
             }
 
-            return Json(lRetorno);
+            return new CustomJsonResult(true) { Data = lRetorno };
+        }
+
+        public JsonResult salvarAgenda(JsonObjectRequestBean prAgenda)
+        {
+            AgendaDTO lAgenda = null;
+            EditarAgendaCompleta lEditarAgendaCompleta = new EditarAgendaCompleta(aContextoExecucao);
+
+            try
+            {
+                lAgenda = JsonConvert.DeserializeObject<AgendaDTO>(prAgenda.JSONOBJECT);
+            }
+            catch (Exception e)
+            {
+                aContextoExecucao.addErro("Erro com as informações inseridas");
+            }
+
+            if (aContextoExecucao.withoutError() && lAgenda != null)
+            {
+                if (!lEditarAgendaCompleta.editar(lAgenda))
+                {
+                    return Json(aContextoExecucao.Messages);
+                }
+            }
+            else
+                return Json(aContextoExecucao.Messages);
+
+            return Json(lEditarAgendaCompleta.aAgendaDTO);
+        }
+
+
+        public JsonResult limparAgenda(int pragendaid)
+        {
+            LimparAgenda lLimparAgenda = new LimparAgenda(aContextoExecucao);
+            if (!lLimparAgenda.Limpar(pragendaid))
+                return Json(aContextoExecucao.Messages);
+            else
+                return new CustomJsonResult() { Data = new AgendaDTO() { agenda = lLimparAgenda.aAgenda, empresa = base.empresa } };
         }
     }
 }

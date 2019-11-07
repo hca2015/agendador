@@ -23,6 +23,9 @@ namespace Tcc.Entity
             {
                 if (string.IsNullOrWhiteSpace(aCliente.documento))
                     addErro("Documento não pode estar em branco");
+                else
+                    if (!ValidaCPF.IsCpf(aCliente.documento))
+                    addErro("CPF inválido");
             }
 
             return withoutError();

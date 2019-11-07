@@ -1,0 +1,78 @@
+﻿@model Tcc.Entity.ClienteFixoDTO
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Apagar</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.nomecliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nomecliente)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.datanascimento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.datanascimento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nomeservico)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nomeservico)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dataultimopagamento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dataultimopagamento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipofrequencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipofrequencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.horario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.horario)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-outline-danger" /> |
+            @Html.ActionLink("De volta a lista", "Index")
+        </div>
+    }
+</div>

@@ -143,7 +143,7 @@ namespace Tcc.Controllers
 
         public ActionResult searchdocumento(string term)
         {
-            return Json(new ClienteRepository().Clientes.Where(c => c.documento.StartsWith(term.ToUpper())).Select(a => new { label = a.documento + " - " + a.nome, nascimento = a.datanascimento, name = a.nome, documento = a.documento, id = a.clienteid }), JsonRequestBehavior.AllowGet);
+            return new CustomJsonResult() { Data = new ClienteRepository().Clientes.Where(c => c.documento.StartsWith(term.ToUpper())).Select(a => new { label = a.documento + " - " + a.nome, nascimento = a.datanascimento, name = a.nome, documento = a.documento, id = a.clienteid }) };
         }
     }
 }

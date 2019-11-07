@@ -79,6 +79,8 @@ namespace Tcc.Models
         public DateTime? DataNascimento { get; set; }
 
         [Display(Name = "Telefone")]
+        [Required(ErrorMessage = "Telefone é obrigatorio, deve-se informar com o DDD")]
+        [DataType(DataType.PhoneNumber)]
         public string Telefone { get; set; }
 
         [Required]

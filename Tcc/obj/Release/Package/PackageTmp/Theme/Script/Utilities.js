@@ -34,7 +34,17 @@ var updateDTO = function (prTo, prFrom) {
             if (typeof prTo[lpropName] === 'function')
                 prTo[lpropName](lvalueFrom === "" || lvalueFrom == null | lvalueFrom === "null" ? "" : lvalueFrom);
             else
-                prTo[lpropName] = lvalueFrom == "null" || lvalueFrom == null ? "" : lvalueFrom
+                if (typeof prTo[lpropName] === 'object') {
+                    //updateDTO(prTo[lpropName], prFrom[lpropName]);
+                    Object.keys(prTo[lpropName]).forEach(
+                        (item) => {
+                            if (prFrom[lpropName][item])
+                                updateDTO(prTo[lpropName][item](), prFrom[lpropName][item]);
+                        }
+                    ) 
+                }
+                else
+                    prTo[lpropName] = lvalueFrom == "null" || lvalueFrom == null ? "" : lvalueFrom;
         }
     }
 }
@@ -70,19 +80,20 @@ var tratarRetorno = function (prRetorno, f) {
 
     var lErro = false;
 
-    if (typeof (prRetorno) === "Array")
+    if (Array.isArray(prRetorno))
     {
-        //if (prRetorno.hasOwnProperty("Messages") || (f == null || f == undefined)) {
-        //    lErro = handleNotifications(prRetorno);
+        if (prRetorno.length > 0) {
+            var notificacao = prRetorno[0].hasOwnProperty('messageType');
+            if (notificacao) {
+                handleNotifications(prRetorno);
+                prRetorno = null;                
+            }
+        }
 
-        //    if (!lErro && (f != null || f != undefined)) {
-        //        f();
-        //    }
-        //}
-        //else {
+        if(typeof(f) === 'function')
             f(prRetorno);
-            return true;
-        //}
+        return true;
+        
     }
 
     if (prRetorno != undefined && prRetorno != null)
@@ -91,12 +102,20 @@ var tratarRetorno = function (prRetorno, f) {
             lErro = handleNotifications(prRetorno);            
 
             if (!lErro && (f != null || f != undefined)) {
-                f(prRetorno);
+                if (typeof (f) === 'function')
+                    f(prRetorno);
             }
         }
         else {
-            f(prRetorno);
+            if (typeof (f) === 'function')
+                f(prRetorno);
             return true;
         }
     }
+}
+
+function JsonObjectRequestBean(prJsonObject) {
+    var obj = this;
+
+    this.JSONOBJECT = ko.mapping.toJSON(ko.mapping.toJS(prJsonObject));
 }

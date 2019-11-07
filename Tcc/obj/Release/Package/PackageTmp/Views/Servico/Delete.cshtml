@@ -13,38 +13,38 @@
     <dl class="dl-horizontal">
 
         <dt style="display:none;">
-            @Html.DisplayNameFor(model => model.EMPRESAID)
+            @Html.DisplayNameFor(model => model.empresaid)
         </dt>
 
         <dd style="display:none;">
-            @Html.DisplayFor(model => model.EMPRESAID)
+            @Html.DisplayFor(model => model.empresaid)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DESCRICAO)
+            @Html.DisplayNameFor(model => model.descricao)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DESCRICAO)
+            @Html.DisplayFor(model => model.descricao)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.VALORSERVICO)
+            @Html.DisplayNameFor(model => model.valorservico)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.VALORSERVICO)
+            @Html.DisplayFor(model => model.valorservico)
         </dd>
 
     </dl>
 
-    @using (Html.BeginForm("Excluir", "Servico", new { id = Model.SERVICOID }))
+    @using (Html.BeginForm("Excluir", "Servico", new { id = Model.servicoid }))
     {
         @Html.AntiForgeryToken()
         
         <div class="form-actions no-color" style="margin-bottom: 20px;">
             <input type="submit" value="Deletar" class="btn btn-outline-danger" />
         </div>
-        @Html.ActionLink("De volta a lista", "Servico")
+        @Html.ActionLink("De volta a lista", "Servico", null, null)
     }
 </div>

@@ -6,21 +6,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Tcc.Entity
 {
     public class ClienteFixoDTO : Modelo
-    {        
+    {
         [Key]
-        public int clientefixoid { get; set; }
+        public int? clientefixoid { get; set; }
         public int? clienteid { get; set; }
         [DisplayName("Último serviço")]
-        [DataType(DataType.Date)]       
+        [DataType(DataType.Date)]
         public DateTime? dataultimoservico { get; set; }
         [DisplayName("Dia da semana")]
         [EnumDataType(typeof(DayOfWeek))]
-        public DayOfWeek diasemana { get; set; }
+        public DayOfWeek? diasemana { get; set; }
         [DisplayName("Frequencia")]
         [EnumDataType(typeof(ClienteFixo.TipoFrequencia))]
-        public ClienteFixo.TipoFrequencia tipofrequencia { get; set; }
-        [DisplayName("Horário")]        
-        public int horario { get; set; }
+        public ClienteFixo.TipoFrequencia? tipofrequencia { get; set; }
+        [DisplayName("Horário")]
+        public int? horario { get; set; }
         [DisplayName("Nome cliente")]
         [DataType(DataType.Text)]
         public string nomecliente { get; set; }
@@ -32,11 +32,11 @@ namespace Tcc.Entity
         [CPF]
         public string documento { get; set; }
         [DataType(DataType.Text)]
-        public int servicoid { get; set; }
+        public int? servicoid { get; set; }
         [DisplayName("Nome serviço")]
         [DataType(DataType.Text)]
         public string nomeservico { get; set; }
-        public int empresaid { get; set; }
+        public int? empresaid { get; set; }
 
         public bool ValidarUltimoServico()
         {
@@ -66,6 +66,17 @@ namespace Tcc.Entity
                 buscar = true;
 
             return buscar;
+        }
+
+        public void setUltimaConsulta(DateTime prData)
+        {
+            if (clientefixoid > 0)
+            {
+                var repo = new ClienteFixoRepository();
+                var entity = repo.getId(clientefixoid.Value);
+                entity.dataultimoservico = prData;
+                repo.update(entity);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Tcc.Entity
 
         }
         public DbSet<Cliente> Clientes { get; set; }
-        
+       
         public bool add(Modelo prEntity)
         {
             try
@@ -70,6 +70,10 @@ namespace Tcc.Entity
             }
         }
 
+        public Cliente getId(int id)
+        {
+            return (from c in Clientes where c.clienteid == id select c).FirstOrDefault();
+        }
         public Cliente getDocumento(string d)
         {
             var linq = from c in Clientes where c.documento == d select c;

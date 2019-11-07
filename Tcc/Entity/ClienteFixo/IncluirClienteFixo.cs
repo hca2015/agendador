@@ -25,12 +25,12 @@ namespace Tcc.Entity
             if (aClienteFixoDTO == null)
                 return withoutError(newError("Houve um erro com as informações digitadas."));
 
-            if(aClienteFixoRepository.getDia(aClienteFixoDTO.empresaid, aClienteFixoDTO.tipofrequencia, aClienteFixoDTO.horario) != null)
+            if(aClienteFixoRepository.getDia(aClienteFixoDTO.empresaid.Value, aClienteFixoDTO.tipofrequencia.Value, aClienteFixoDTO.horario.Value) != null)
                 return withoutError(newError("Já existe um cliente fixo neste horário."));
 
-            aParametrizacaoAgenda = aParametrizacaoAgendaRepository.getEmpresa(aClienteFixoDTO.empresaid);
+            aParametrizacaoAgenda = aParametrizacaoAgendaRepository.getEmpresa(aClienteFixoDTO.empresaid.Value);
 
-            if(aParametrizacaoAgenda == null && (aClienteFixoDTO.horario < aParametrizacaoAgenda.HORAINI || aClienteFixoDTO.horario > aParametrizacaoAgenda.HORAFIM))
+            if(aParametrizacaoAgenda == null || (aClienteFixoDTO.horario < aParametrizacaoAgenda.HORAINI || aClienteFixoDTO.horario > aParametrizacaoAgenda.HORAFIM))
                 return withoutError(newError("Parametrizacao de agenda não encontrada ou horário fora do intervalo de trabalho."));
 
             return withoutError();
@@ -58,16 +58,16 @@ namespace Tcc.Entity
             cfixo = new ClienteFixo()
             {
                 clienteid = cli.clienteid,
-                servicoid = aClienteFixoDTO.servicoid,
+                servicoid = aClienteFixoDTO.servicoid.Value,
                 dataultimoservico = aClienteFixoDTO.dataultimoservico,
                 diasemana = (int)aClienteFixoDTO.diasemana,
-                horario = aClienteFixoDTO.horario,
+                horario = aClienteFixoDTO.horario.Value,
                 tipofrequencia = (int)aClienteFixoDTO.tipofrequencia
             };
 
             aClienteFixoRepository.add(cfixo);
 
-            aIncluirClienteFixoEmpresa.incluir(new ClienteFixoEmpresa() { clientefixoid = cfixo.clientefixoid, empresaid = aClienteFixoDTO.empresaid});
+            aIncluirClienteFixoEmpresa.incluir(new ClienteFixoEmpresa() { clientefixoid = cfixo.clientefixoid, empresaid = aClienteFixoDTO.empresaid.Value});
 
             return withoutError();
         }
