@@ -36,7 +36,7 @@
                 document.getElementById('closeModal').click();
             },
             onSuccess: function (dado) {
-                toastr.success('Senha alterada com sucesso'); 
+                toastr.success('Senha alterada com sucesso');
             },
         }).request();
 
@@ -46,7 +46,7 @@
     this.retorno = function (dado) {
         updateDTO(obj, ko.mapping.fromJSON(dado));
     }
-        
+
     this.replace = function (user) {
         var entity = ko.utils.arrayFirst(obj.UsersAssociados(), function (item) { return user.membershipid === item.membershipid });
         obj.UsersAssociados.replace(entity, user);
@@ -68,6 +68,7 @@
     }
 
     this.desvincular = function () {
+
         server({
             url: "/Manage/desvincularUser?userid=" + obj.userObject.userid(),
             onSuccess: function (dado) {
@@ -79,30 +80,41 @@
     }
 
     this.alterarEmpresa = function () {
-        server({
-            url: "/Manage/AlterarEmpresa",
-            jsonObject: getJsonObject(obj.Empresa),
-            beforeSend: function () {
-                document.getElementById('closeModalApagarEmpresa').click();
-            },
-            onSuccess: function (dado) {
-                updateDTO(obj.Empresa, dado)
-                toastr.success('Empresa alterada com sucesso');
-            },
-        }).request();
+
+        if (obj.Empresa().hasOwnProperty("empresaid") && obj.Empresa().hasOwnProperty("empresaid") > 0) {
+            server({
+                url: "/Manage/AlterarEmpresa",
+                jsonObject: getJsonObject(obj.Empresa),
+                beforeSend: function () {
+                    document.getElementById('closeModalApagarEmpresa').click();
+                },
+                onSuccess: function (dado) {
+                    updateDTO(obj.Empresa, dado)
+                    toastr.success('Empresa alterada com sucesso');
+                },
+            }).request();
+        }
+        else {
+            toastr.error('Nenhuma empresa associada.');
+        }
     }
 
     this.apagarEmpresa = function () {
-        server({
-            url: "/Manage/ApagarEmpresa",
-            jsonObject: getJsonObject(obj.Empresa),
-            beforeSend: function () {
-                document.getElementById('closeModalApagarEmpresa').click();
-            },
-            onSuccess: function (dado) {
-                toastr.success('Empresa apagada com sucesso');
-            },
-        }).request();
+        if (obj.Empresa().hasOwnProperty("empresaid") && obj.Empresa().hasOwnProperty("empresaid") > 0) {
+            server({
+                url: "/Manage/ApagarEmpresa",
+                jsonObject: getJsonObject(obj.Empresa),
+                beforeSend: function () {
+                    document.getElementById('closeModalApagarEmpresa').click();
+                },
+                onSuccess: function (dado) {
+                    toastr.success('Empresa apagada com sucesso');
+                },
+            }).request();
+        }
+        else {
+            toastr.error('Nenhuma empresa associada.');
+        }
     }
 
     this.inicializar = function (prForm, prMaster, prAssociados, empresa) {
@@ -110,6 +122,10 @@
         obj.isMaster(prMaster);
         obj.UsersAssociados(prAssociados);
         obj.Empresa(empresa);
+
+        if (!obj.Empresa())
+            obj.Empresa = ko.observable({});
+
         ko.applyBindings(obj, document.getElementById(prForm));
     }
 }

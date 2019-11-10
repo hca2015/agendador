@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using Tcc.Entity;
 using Tcc.Models;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Tcc.Controllers
 {
@@ -35,9 +35,9 @@ namespace Tcc.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -68,7 +68,7 @@ namespace Tcc.Controllers
 
             string userId = User.Identity.GetUserId();
 
-            var userRepository = new UsersRepository();
+            UsersRepository userRepository = new UsersRepository();
             User user;
             try
             {
@@ -80,7 +80,9 @@ namespace Tcc.Controllers
                 throw;
             }
 
-            bool isMaster = user == null ? false : user.usermasterid == null;
+            Empresa empresa = new EmpresaRepository().getUser(user.userid);
+
+            bool isMaster = user == null || empresa == null || empresa.empresaid < 1 ? false : user.usermasterid == null;
 
             ViewBag.IsMaster = isMaster;
 
@@ -90,7 +92,7 @@ namespace Tcc.Controllers
                 ViewBag.UsuariosAssociados = JsonConvert.SerializeObject(usuariosSlaves);
             }
 
-            ViewBag.empresa = JsonConvert.SerializeObject(new EmpresaRepository().getUser(user.userid));
+            ViewBag.empresa = JsonConvert.SerializeObject(empresa);
 
             IndexViewModel model = new IndexViewModel
             {
@@ -279,12 +281,12 @@ namespace Tcc.Controllers
                 aContextoExecucao.addErro("Verificar se todos os campos foram digitados!");
                 return Json(aContextoExecucao.Messages);
             }
-                        
-            var token = UserManager.GeneratePasswordResetToken(model.userid);
+
+            string token = UserManager.GeneratePasswordResetToken(model.userid);
             IdentityResult result = UserManager.ResetPassword(model.userid, token, model.NewPassword);
-            
+
             if (result.Succeeded)
-            {               
+            {
                 return Json(aContextoExecucao.Messages);
             }
 
@@ -415,7 +417,9 @@ namespace Tcc.Controllers
                 return Json(userRepository.getSlaves(masterId));
             }
             else
+            {
                 return Json(lDesvincularUser.Messages);
+            }
         }
 
         public JsonResult AlterarEmpresa(Empresa emp)
@@ -428,7 +432,9 @@ namespace Tcc.Controllers
 
             EditarEmpresa lEditarEmpresa = new EditarEmpresa();
             if (!lEditarEmpresa.editar(emp))
+            {
                 return Json(lEditarEmpresa.Messages);
+            }
 
             return Json(lEditarEmpresa.aEmpresa);
         }
@@ -502,6 +508,6 @@ namespace Tcc.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

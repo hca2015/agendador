@@ -17,7 +17,11 @@
         </div>
 
         <button style="margin-bottom:10px;" type="button" data-bind="click:buscarReceita" class="btn btn-outline-primary">Buscar (CNPJ apenas)</button>
-
+        
+        <div class="form-group">
+            <label for="fantasia">Razão Social</label>
+            <input class="form-control" data-bind="value: nome" placeholder="fantasia...">
+        </div>
         <div class="form-group">
             <label for="situacao">Situacao</label>
             <input class="form-control" data-bind="value: situacao" placeholder="ATIVO/INATIVO">
