@@ -90,8 +90,8 @@
                         <input type="text" class="form-control" data-bind="value: Empresa().uf">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-warning" data-bind="alterarEmpresa">Alterar dados</button>                
-                <button id="mostrarModalApagarEmpresa" type="button" class="btn btn-danger" style="float:right" data-toggle="modal" data-target="#modalApagarEmpresa">
+                <button type="submit" class="btn btn-warning" data-bind="click: alterarEmpresa, visible: isMaster">Alterar dados</button>                
+                <button data-bind="visible: isMaster" id="mostrarModalApagarEmpresa" type="button" class="btn btn-danger" style="float:right" data-toggle="modal" data-target="#modalApagarEmpresa">
                     Desvincular <i class="fa fa-ban fakeBtn" aria-hidden="true" title="Alterar senha do usuário"></i>
                 </button>
             </form>
@@ -198,9 +198,9 @@
         </div>
     </div>
 
-    <!-- Modal Desvincular User-->
+    <!-- Modal Apagar Empresa-->
     <div class="modal fade" id="modalApagarEmpresa" tabindex="-1" role="dialog" aria-labelledby="modalApagarEmpresaTitle" data-backdrop="static" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered mw-100 w-50" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalApagarEmpresa">Confirmar?</h5>
