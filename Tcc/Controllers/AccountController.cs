@@ -163,98 +163,160 @@ namespace Tcc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            ApplicationUser user = null;
-            IdentityResult result = null;
-            if (ModelState.IsValid)
+            try
             {
-                model.CPF = model.CPF.removerCaracteresEspeciais();
-                bool cadastroSlave = User.Identity.IsAuthenticated;
-                User lUsuarioMaster = null;
-                UsersRepository lUsersRepository = new UsersRepository();
-
-                if (cadastroSlave)
-                    lUsuarioMaster = lUsersRepository.GetUserId(User.Identity.GetUserId());
-
-                using (TransactionScope _scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
+                ApplicationUser user = null;
+                IdentityResult result = null;
+                if (ModelState.IsValid)
                 {
-                    User lUsuarioInativo = lUsersRepository.getMembershipEmail(model.Email);
+                    model.CPF = model.CPF.removerCaracteresEspeciais();
+                    bool cadastroSlave = User.Identity.IsAuthenticated;
+                    User lUsuarioMaster = null;
+                    UsersRepository lUsersRepository = new UsersRepository();
 
-                    if (lUsuarioInativo != null)
+                    if (cadastroSlave)
+                        lUsuarioMaster = lUsersRepository.GetUserId(User.Identity.GetUserId());
+
+                    using (TransactionScope _scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        if (lUsuarioInativo.cpfDiferente(model.CPF))
+                        User lUsuarioInativo = lUsersRepository.getMembershipEmail(model.Email);
+
+                        if (lUsuarioInativo != null)
                         {
-                            AddError("Login já existente, porém CPF divergente");
-                            return View(model);
-                        }
-
-                        if (lUsersRepository.getCPF(model.CPF) != null)
-                        {
-                            AddError("CPF ativo já cadastrado.");
-                            return View(model);
-                        }
-
-                        lUsuarioInativo.ativo = 1;
-
-                        if (cadastroSlave)
-                            lUsuarioInativo.usermasterid = lUsuarioMaster.userid;
-
-                        EditarUsers lEditarUsers = new EditarUsers();
-                        if (!lEditarUsers.editar(lUsuarioInativo))
-                            AddError("Não foi possível ativar o usuário");
-
-                        var token = UserManager.GeneratePasswordResetToken(lUsuarioInativo.membershipid);
-                        result = UserManager.ResetPassword(lUsuarioInativo.membershipid, token, model.Password);
-
-                        if (!cadastroSlave)
-                            user = UserManager.FindByEmail(model.Email);
-                    }
-                    else
-                    {
-                        user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                        result = await UserManager.CreateAsync(user, model.Password);
-                        result = await UserManager.AddToRoleAsync(user.Id, "default".ToUpper());
-                        if (result.Succeeded)
-                        {
-                            User lUser = new User()
+                            if (lUsuarioInativo.cpfDiferente(model.CPF))
                             {
-                                membershipid = user.Id,
-                                cpf = model.CPF,
-                                email = model.Email,
-                                datanascimento = model.DataNascimento,
-                                nome = model.Nome,
-                                telefone = model.Telefone,
-                                ativo = 1,
-                                usermasterid = cadastroSlave ? (int?)lUsuarioMaster.userid : null
-                            };
-
-                            IncluirUsers lIncluirUsers = new IncluirUsers();
-                            if (!lIncluirUsers.incluir(lUser))
-                            {
-                                foreach (var item in lIncluirUsers.Messages)
-                                {
-                                    AddError(item.ToString());
-                                }
-                                _scope.Dispose();
+                                AddError("Login já existente, porém CPF divergente");
                                 return View(model);
                             }
+
+                            if (lUsersRepository.getCPF(model.CPF) != null)
+                            {
+                                AddError("CPF ativo já cadastrado.");
+                                return View(model);
+                            }
+
+                            lUsuarioInativo.ativo = 1;
+
+                            if (cadastroSlave)
+                                lUsuarioInativo.usermasterid = lUsuarioMaster.userid;
+
+                            EditarUsers lEditarUsers = new EditarUsers();
+                            if (!lEditarUsers.editar(lUsuarioInativo))
+                                AddError("Não foi possível ativar o usuário");
+
+                            var token = UserManager.GeneratePasswordResetToken(lUsuarioInativo.membershipid);
+                            result = UserManager.ResetPassword(lUsuarioInativo.membershipid, token, model.Password);
+
+                            if (!cadastroSlave)
+                                user = UserManager.FindByEmail(model.Email);
                         }
-                    }
-                    if (ModelState.IsValid)
-                    {
-                        if (cadastroSlave) { _scope.Complete(); return RedirectToAction("Index", "Manage"); }
                         else
                         {
-                            SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
-                            _scope.Complete();
-                            return RedirectToAction("Index", "Home");
+
+                            try
+                            {
+                                try
+                                {
+                                    user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                                }
+                                catch (Exception e)
+                                {
+                                    ModelState.AddModelError("Erro", "Achei o erro => criando novo user (instancia)");
+                                    return View(model);
+                                }
+
+                                try
+                                {
+                                    result = UserManager.Create(user, model.Password);
+
+                                    if (!result.Succeeded)
+                                    {
+                                        foreach (var item in result.Errors)
+                                        {
+                                            ModelState.AddModelError("erro $item", item);
+                                        }
+                                        return View(model);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    ModelState.AddModelError("Erro", "Achei o erro => incluindo novo user");
+                                    return View(model);
+                                }
+
+                                try
+                                {
+                                    result = UserManager.AddToRole(user.Id, "default".ToUpper());
+
+                                    if (!result.Succeeded)
+                                    {
+                                        foreach (var item in result.Errors)
+                                        {
+                                            ModelState.AddModelError("erro $item", item);
+                                        }
+                                        return View(model);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    ModelState.AddModelError("Erro", "Achei o erro => adicionando a role");
+                                    return View(model);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                ModelState.AddModelError("Erro", "Achei o erro => inclusao no identity");
+                                return View(model);
+                            }
+
+
+                            if (result.Succeeded)
+                            {
+                                User lUser = new User()
+                                {
+                                    membershipid = user.Id,
+                                    cpf = model.CPF,
+                                    email = model.Email,
+                                    datanascimento = model.DataNascimento,
+                                    nome = model.Nome,
+                                    telefone = model.Telefone,
+                                    ativo = 1,
+                                    usermasterid = cadastroSlave ? (int?)lUsuarioMaster.userid : null
+                                };
+
+                                IncluirUsers lIncluirUsers = new IncluirUsers();
+                                if (!lIncluirUsers.incluir(lUser))
+                                {
+                                    foreach (var item in lIncluirUsers.Messages)
+                                    {
+                                        AddError(item.ToString());
+                                    }
+                                    _scope.Dispose();
+                                    return View(model);
+                                }
+                            }
+                        }
+                        if (ModelState.IsValid)
+                        {
+                            if (cadastroSlave) { _scope.Complete(); return RedirectToAction("Index", "Manage"); }
+                            else
+                            {
+                                SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
+                                _scope.Complete();
+                                return RedirectToAction("Index", "Home");
+                            }
+                        }
+                        else
+                        {
+                            _scope.Dispose();
+                            return View(model);
                         }
                     }
-                    else
-                    {
-                        _scope.Dispose();
-                        return View(model);
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("Exception occurred", e.Message);
             }
 
             // If we got this far, something failed, redisplay form
@@ -299,11 +361,16 @@ namespace Tcc.Controllers
                 }
                                 
                 EnviarSMSSenha lEnviarSMSSenha = new EnviarSMSSenha(aContextoExecucao);
-                lEnviarSMSSenha.enviarSMS(user, _userManager);
-
+                if(!lEnviarSMSSenha.enviarSMS(user, UserManager))
+                {
+                    foreach (var item in aContextoExecucao.Messages)
+                    {
+                        ModelState.AddModelError($"error=>{item.message}", item.message);
+                    }
+                    return View(model);
+                }
             }
-            
-            return View(model);
+            return View("ForgotPasswordConfirmation");
         }
 
         //

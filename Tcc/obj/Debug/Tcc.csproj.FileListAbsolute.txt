@@ -49,6 +49,8 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\roslyn\vbc.rsp
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\roslyn\VBCSCompiler.exe
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Antlr3.Runtime.dll
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.dll
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\EntityFramework.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\EntityFramework.SqlServer.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.AspNet.Identity.Core.dll
@@ -77,6 +79,10 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPage
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.WebPages.Razor.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\WebGrease.dll
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.pdb
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.xml
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.pdb
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Newtonsoft.Json.pdb
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Newtonsoft.Json.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Web.Helpers.xml
@@ -104,13 +110,7 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.Owin.Sec
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Diagnostics.DiagnosticSource.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.CopyComplete
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.pdb
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.dll
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.dll
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.pdb
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.Core.xml
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.pdb
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\AWSSDK.SimpleNotificationService.xml

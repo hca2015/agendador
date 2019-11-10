@@ -25,10 +25,14 @@ namespace Tcc.Entity
             aUser = new UsersRepository().GetUserId(aApplicationUser.Id);
 
             if (aUser == null)
+            {
                 return aContextoExecucao.withoutError(newError("usuario nao encontrado"));
+            }
 
             if (string.IsNullOrWhiteSpace(aUser.telefone))
+            {
                 aContextoExecucao.addErro("Usuario nao possui telefone cadastrado.");
+            }
 
             return aContextoExecucao.withoutError();
         }
@@ -40,15 +44,25 @@ namespace Tcc.Entity
 
             string lGuid = Guid.NewGuid().ToString();
 
-            string lSenha = "!" + lGuid.Substring(0, 5) + "$" + lGuid.Substring(20, 4);
+            string lSenha = "!" + lGuid.Substring(0, 5).ToLower() + "$" + lGuid.Substring(20, 3).ToUpper();
 
-            var token = aApplicationUserManager.GeneratePasswordResetToken(aUser.membershipid);
-            var result = aApplicationUserManager.ResetPassword(aUser.membershipid, token, lSenha);
-                        
-            PublishRequest pubRequest = new PublishRequest();
-            pubRequest.Message = string.Format("Olá, {0}\nPor favor, logar com a senha a seguir e trocá-la: {1}", aUser.nome, lSenha);
-            pubRequest.PhoneNumber = "+55" + aUser.telefone.Trim().removerCaracteresEspeciais();
-            PublishResponse pubResponse = snsClient.Publish(pubRequest);
+            string token = aApplicationUserManager.GeneratePasswordResetToken(aUser.membershipid);
+            IdentityResult result = aApplicationUserManager.ResetPassword(aUser.membershipid, token, lSenha);
+
+            if (result.Succeeded)
+            {
+                PublishRequest pubRequest = new PublishRequest();
+                pubRequest.Message = string.Format("Olá, {0}\nPor favor, logar com a senha a seguir e trocá-la: {1}", aUser.nome, lSenha);
+                pubRequest.PhoneNumber = "+55" + aUser.telefone.Trim().removerCaracteresEspeciais();
+                PublishResponse pubResponse = snsClient.Publish(pubRequest);
+            }
+            else
+            {
+                foreach (var item in result.Errors)
+                {
+                    aContextoExecucao.addErro(item);
+                }
+            }
 
             return aContextoExecucao.withoutError();
         }
