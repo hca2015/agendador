@@ -2,6 +2,7 @@
 using Amazon.SimpleNotificationService.Model;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Text.RegularExpressions;
 using Tcc.Apoio;
 using Tcc.Models;
 
@@ -45,6 +46,14 @@ namespace Tcc.Entity
             string lGuid = Guid.NewGuid().ToString();
 
             string lSenha = "!" + lGuid.Substring(0, 5).ToLower() + "$" + lGuid.Substring(20, 3).ToUpper();
+
+            Regex r = new Regex("[a-z]");
+            if (!r.Match(lSenha).Success)
+                lSenha += "e";
+
+            r = new Regex("[A-Z]");
+            if (!r.Match(lSenha).Success)
+                lSenha += "F";
 
             string token = aApplicationUserManager.GeneratePasswordResetToken(aUser.membershipid);
             IdentityResult result = aApplicationUserManager.ResetPassword(aUser.membershipid, token, lSenha);
