@@ -62,7 +62,7 @@
 
     this.alterarEstadoUser = function (user, acao) {
         server({
-            url: "/Manage/alterarEstadoUser?membershipid=" + user.membershipid + "&acao=" + acao,
+            url: "/Manage/alterarEstadoUser?userid=" + user.userid + "&acao=" + acao,
             onSuccess: function (dado) { obj.replace(dado); },
         }).request();
     }
@@ -109,6 +109,7 @@
                 },
                 onSuccess: function (dado) {
                     toastr.success('Empresa apagada com sucesso');
+                    windows.location = '/Manage/Index';
                 },
             }).request();
         }
