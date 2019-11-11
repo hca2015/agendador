@@ -447,6 +447,9 @@ namespace Tcc.Controllers
                 return Json(aContextoExecucao.Messages);
             }
 
+            if(empresa != null) 
+                new EmpresaRepository().apagarEmpresa(empresa.empresaid);
+
             return Json(null);
         }
 

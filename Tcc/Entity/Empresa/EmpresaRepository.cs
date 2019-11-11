@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -91,6 +92,20 @@ namespace Tcc.Entity
                                        select e;
 
             return linq.FirstOrDefault();
+        }
+
+        public void apagarEmpresa(int empresaid)
+        {
+            string delete = @"
+            delete [dbo].[userempresa] where empresaid = :p__linq__0
+            delete[dbo].[agenda] where empresaid = :p__linq__0
+            delete[dbo].[PARAMETRIZACAOAGENDA] where empresaid = :p__linq__0
+            delete[dbo].[clientefixoempresa] where empresaid = :p__linq__0
+            delete[dbo].[SERVICO] where empresaid = :p__linq__0
+            delete[dbo].[empresa] where empresaid = :p__linq__0
+            ";
+
+            Database.ExecuteSqlCommand(delete, empresaid);
         }
     }
 }
