@@ -71,7 +71,7 @@ namespace Tcc.Controllers
         {
             DateTime lData = prData == null ? DateTime.Now.Date : prData.Value.Date;
             //REMOVER***************************************************************************
-            lData = new DateTime(2019, 10, 23);
+            //lData = new DateTime(2019, 10, 23);
 
             AgendaRepository lAgendaRepository = new AgendaRepository();
             List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(lData);
@@ -102,7 +102,7 @@ namespace Tcc.Controllers
             if (DateTime.TryParse(prData, out lData))
             {
                 //REMOVER***************************************************************************
-                lData = new DateTime(2019, 10, 23);
+                //lData = new DateTime(2019, 10, 23);
 
                 AgendaRepository lAgendaRepository = new AgendaRepository();
                 lRetorno = lAgendaRepository.getAgendaDTO(lData);

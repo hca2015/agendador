@@ -51,6 +51,7 @@
             jsonObject: getJsonObject(obj.aParametrizacaoEmpresa),
             onSuccess: function (dado) {
                 tratarRetorno(dado, obj.validarParametrizacao);
+                obj.getDados();
                 $("#closeModal").click();
             },
         }).request();
