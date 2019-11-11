@@ -22,7 +22,7 @@ namespace Tcc.Entity
                 Empresa Entity = (Empresa)prEntity;
 
                 empresas.Add(Entity);
-
+                                
                 return SaveChanges() > 0;
             }
             catch (Exception e)
@@ -37,9 +37,12 @@ namespace Tcc.Entity
             {
                 Empresa Entity = (Empresa)prEntity;
 
-                empresas.Attach(Entity);
+                Empresa lEmpresa = empresas.Find(Entity.empresaid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if(lEmpresa != null && lEmpresa != Entity)
+                {
+                    lEmpresa.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }
@@ -96,13 +99,13 @@ namespace Tcc.Entity
 
         public void apagarEmpresa(int empresaid)
         {
-            string delete = @"
-            delete [dbo].[userempresa] where empresaid = :p__linq__0
-            delete[dbo].[agenda] where empresaid = :p__linq__0
-            delete[dbo].[PARAMETRIZACAOAGENDA] where empresaid = :p__linq__0
-            delete[dbo].[clientefixoempresa] where empresaid = :p__linq__0
-            delete[dbo].[SERVICO] where empresaid = :p__linq__0
-            delete[dbo].[empresa] where empresaid = :p__linq__0
+            string delete = $@"
+            delete [dbo].[userempresa] where empresaid = { empresaid } 
+            delete[dbo].[agenda] where empresaid = { empresaid } 
+            delete[dbo].[PARAMETRIZACAOAGENDA] where empresaid = { empresaid } 
+            delete[dbo].[clientefixoempresa] where empresaid = { empresaid } 
+            delete[dbo].[SERVICO] where empresaid = { empresaid } 
+            delete[dbo].[empresa] where empresaid = { empresaid } 
             ";
 
             Database.ExecuteSqlCommand(delete, empresaid);

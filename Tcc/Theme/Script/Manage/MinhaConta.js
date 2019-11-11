@@ -109,7 +109,7 @@
                 },
                 onSuccess: function (dado) {
                     toastr.success('Empresa apagada com sucesso');
-                    document.location.reload(true);
+                    windows.location = '/Manage/Index';
                 },
             }).request();
         }

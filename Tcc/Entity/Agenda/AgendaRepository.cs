@@ -42,9 +42,12 @@ namespace Tcc.Entity
             {
                 Agenda Entity = (Agenda)prEntity;
 
-                Agendas.Attach(Entity);
+                Agenda lAgenda = Agendas.Find(Entity.agendaid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lAgenda != null && lAgenda != Entity)
+                {
+                    lAgenda.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

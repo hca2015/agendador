@@ -86,11 +86,14 @@ namespace Tcc.Controllers
 
             ViewBag.IsMaster = isMaster;
 
+            List<User> usuariosSlaves = new List<User>();
+
             if (isMaster)
             {
-                List<User> usuariosSlaves = userRepository.getSlaves(user.userid);
-                ViewBag.UsuariosAssociados = JsonConvert.SerializeObject(usuariosSlaves);
+                usuariosSlaves = userRepository.getSlaves(user.userid);                
             }
+
+            ViewBag.UsuariosAssociados = JsonConvert.SerializeObject(usuariosSlaves);
 
             ViewBag.empresa = JsonConvert.SerializeObject(empresa);
 
@@ -358,7 +361,7 @@ namespace Tcc.Controllers
             // Request a redirect to the external login provider to link a login for the current user
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
-
+        
         //
         // GET: /Manage/LinkLoginCallback
         public async Task<ActionResult> LinkLoginCallback()

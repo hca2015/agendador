@@ -37,9 +37,12 @@ namespace Tcc.Entity
             {
                 UserEmpresa Entity = (UserEmpresa)prEntity;
 
-                userempresas.Attach(Entity);
+                UserEmpresa lUserEmpresa = userempresas.Find(Entity.userempresaid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lUserEmpresa != null && lUserEmpresa != Entity)
+                {
+                    lUserEmpresa.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

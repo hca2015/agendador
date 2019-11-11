@@ -37,9 +37,12 @@ namespace Tcc.Entity
             {
                 Cliente Entity = (Cliente)prEntity;
 
-                Clientes.Attach(Entity);
+                Cliente lCliente = Clientes.Find(Entity.clienteid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lCliente != null && lCliente != Entity)
+                {
+                    lCliente.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

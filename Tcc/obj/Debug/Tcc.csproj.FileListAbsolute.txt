@@ -110,7 +110,7 @@ C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.Owin.Sec
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\System.Diagnostics.DiagnosticSource.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csproj.CopyComplete
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.dll
 C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.pdb
+C:\Users\harye\OneDrive\Documentos\_Faculdade\Tcc\Tcc\Tcc\obj\Debug\Tcc.csprojAssemblyReference.cache

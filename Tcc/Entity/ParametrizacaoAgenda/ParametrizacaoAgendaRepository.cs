@@ -39,9 +39,12 @@ namespace Tcc.Entity
             {
                 ParametrizacaoAgenda Entity = (ParametrizacaoAgenda)prEntity;
 
-                ParametrizacaoAgendas.Attach(Entity);
+                ParametrizacaoAgenda lParametrizacaoAgenda = ParametrizacaoAgendas.Find(Entity.PARAMETRIZACAOAGENDAID);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lParametrizacaoAgenda != null && lParametrizacaoAgenda != Entity)
+                {
+                    lParametrizacaoAgenda.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

@@ -39,9 +39,12 @@ namespace Tcc.Entity
             {
                 Servico Entity = (Servico)prEntity;
 
-                Servicos.Attach(Entity);
+                Servico lServico = Servicos.Find(Entity.servicoid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lServico != null && lServico != Entity)
+                {
+                    lServico.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

@@ -40,9 +40,12 @@ namespace Tcc.Entity
             {
                 ClienteFixoEmpresa Entity = (ClienteFixoEmpresa)prEntity;
 
-                ClienteFixoEmpresas.Attach(Entity);
+                ClienteFixoEmpresa lClienteFixoEmpresa = ClienteFixoEmpresas.Find(Entity.clientefixoempresaid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lClienteFixoEmpresa != null && lClienteFixoEmpresa != Entity)
+                {
+                    lClienteFixoEmpresa.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }

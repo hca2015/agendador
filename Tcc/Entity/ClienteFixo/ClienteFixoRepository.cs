@@ -13,7 +13,7 @@ namespace Tcc.Entity
 
         }
         public DbSet<ClienteFixo> ClienteFixos { get; set; }
-        public DbSet<ClienteFixoEmpresa> ClienteFixoEmpresas { get; set; }
+        public DbSet<ClienteFixoClienteFixo> ClienteFixoClienteFixos { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Servico> Servicos { get; set; }
 
@@ -43,9 +43,12 @@ namespace Tcc.Entity
             {
                 ClienteFixo Entity = (ClienteFixo)prEntity;
 
-                ClienteFixos.Attach(Entity);
+                ClienteFixo lClienteFixo = ClienteFixos.Find(Entity.clientefixoid);
 
-                Entry(Entity).State = EntityState.Modified;
+                if (lClienteFixo != null && lClienteFixo != Entity)
+                {
+                    lClienteFixo.Update(Entity);
+                }
 
                 return SaveChanges() > 0;
             }
@@ -79,13 +82,13 @@ namespace Tcc.Entity
         }
 
 
-        public List<ClienteFixoDTO> getEmpresa(int empresaid)
+        public List<ClienteFixoDTO> getClienteFixo(int ClienteFixoid)
         {
             var linq = from cfixo in ClienteFixos
-                       join emp in ClienteFixoEmpresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join emp in ClienteFixoClienteFixos on cfixo.clientefixoid equals emp.clientefixoid
                        join svc in Servicos on cfixo.servicoid equals svc.servicoid
                        join cli in Clientes on cfixo.clienteid equals cli.clienteid
-                       where emp.empresaid == empresaid
+                       where emp.ClienteFixoid == ClienteFixoid
                        select new ClienteFixoDTO()
                        {
                            clienteid = cli.clienteid,
@@ -93,7 +96,7 @@ namespace Tcc.Entity
                            dataultimoservico = cfixo.dataultimoservico,
                            diasemana = (DayOfWeek)cfixo.diasemana,
                            documento = cli.documento,
-                           empresaid = empresaid,
+                           ClienteFixoid = ClienteFixoid,
                            horario = cfixo.horario,
                            nomecliente = cli.nome,
                            nomeservico = svc.descricao,
@@ -105,13 +108,13 @@ namespace Tcc.Entity
             return linq.ToList();
         }
 
-        public ClienteFixoDTO getDia(int empresaid, DateTime prDateTime, int horaini)
+        public ClienteFixoDTO getDia(int ClienteFixoid, DateTime prDateTime, int horaini)
         {
             var linq = from cfixo in ClienteFixos
-                       join emp in ClienteFixoEmpresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join emp in ClienteFixoClienteFixos on cfixo.clientefixoid equals emp.clientefixoid
                        join svc in Servicos on cfixo.servicoid equals svc.servicoid
                        join cli in Clientes on cfixo.clienteid equals cli.clienteid
-                       where emp.empresaid == empresaid
+                       where emp.ClienteFixoid == ClienteFixoid
                        && cfixo.diasemana == (int)prDateTime.DayOfWeek
                        && cfixo.horario == horaini                                             
                        select new ClienteFixoDTO()
@@ -121,7 +124,7 @@ namespace Tcc.Entity
                            dataultimoservico = cfixo.dataultimoservico,
                            diasemana = (DayOfWeek)cfixo.diasemana,
                            documento = cli.documento,
-                           empresaid = empresaid,
+                           ClienteFixoid = ClienteFixoid,
                            horario = cfixo.horario,
                            nomecliente = cli.nome,
                            nomeservico = svc.descricao,
@@ -138,13 +141,13 @@ namespace Tcc.Entity
             return result;
         }
 
-        public ClienteFixoDTO getDia(int empresaid, ClienteFixo.TipoFrequencia prFrequencia, int horaini)
+        public ClienteFixoDTO getDia(int ClienteFixoid, ClienteFixo.TipoFrequencia prFrequencia, int horaini)
         {
             var linq = from cfixo in ClienteFixos
-                       join emp in ClienteFixoEmpresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join emp in ClienteFixoClienteFixos on cfixo.clientefixoid equals emp.clientefixoid
                        join svc in Servicos on cfixo.servicoid equals svc.servicoid
                        join cli in Clientes on cfixo.clienteid equals cli.clienteid
-                       where emp.empresaid == empresaid
+                       where emp.ClienteFixoid == ClienteFixoid
                        && cfixo.diasemana == (int)prFrequencia
                        && cfixo.horario == horaini
                        select new ClienteFixoDTO()
@@ -154,7 +157,7 @@ namespace Tcc.Entity
                            dataultimoservico = cfixo.dataultimoservico,
                            diasemana = (DayOfWeek)cfixo.diasemana,
                            documento = cli.documento,
-                           empresaid = empresaid,
+                           ClienteFixoid = ClienteFixoid,
                            horario = cfixo.horario,
                            nomecliente = cli.nome,
                            nomeservico = svc.descricao,
