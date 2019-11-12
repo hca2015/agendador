@@ -29,7 +29,10 @@
                 //set tagids to save
                 $("#clienteid").val(ui.item.id);
                 $("#nomecliente").val(ui.item.name);
-                $("#datanascimento").val(ui.item.nascimento);
+                //$("#datanascimento").val(ui.item.nascimento);
+
+                let dataEditar = new Date(ui.item.nascimento);
+                document.getElementById('datanascimento').value = `${dataEditar.getFullYear()}-${dataEditar.getMonth() + 1 >= 10 ? dataEditar.getMonth() + 1 : '' + dataEditar.getMonth() + 1}-${dataEditar.getDate()}`;
 
                 //Tags for display
                 this.value = ui.item.documento;

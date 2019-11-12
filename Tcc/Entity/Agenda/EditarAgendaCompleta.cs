@@ -25,6 +25,8 @@ namespace Tcc.Entity
             if (aAgendaDTO.cliente.clienteid < 1 && (string.IsNullOrWhiteSpace(aAgendaDTO.cliente.documento) || !aAgendaDTO.cliente.datanascimento.HasValue))
                 return aContextoExecucao.withoutError(newError("Necessário preencher todas as informações do cliente"));
 
+            aAgendaDTO.cliente.documento = aAgendaDTO.cliente.documento.removerCaracteresEspeciais();
+
             if (!ValidaCPF.IsCpf(aAgendaDTO.cliente.documento))
                 return aContextoExecucao.withoutError(newError("CPF inválido"));
 
