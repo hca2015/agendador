@@ -99,7 +99,7 @@ namespace Tcc.Entity
                            clienteid = cli.clienteid,
                            datanascimento = cli.datanascimento,
                            dataultimoservico = cfixo.dataultimoservico,
-                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           diasemana = (DiaSemana)cfixo.diasemana,
                            documento = cli.documento,
                            empresaid = cfixoemp.empresaid,
                            horario = cfixo.horario,

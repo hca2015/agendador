@@ -88,13 +88,13 @@ namespace Tcc.Entity
                        join emp in Empresas on cfixo.clientefixoid equals emp.clientefixoid
                        join svc in Servicos on cfixo.servicoid equals svc.servicoid
                        join cli in Clientes on cfixo.clienteid equals cli.clienteid
-                       where emp.clientefixoid == empresaid
+                       where emp.empresaid == empresaid
                        select new ClienteFixoDTO()
                        {
                            clienteid = cli.clienteid,
                            datanascimento = cli.datanascimento,
                            dataultimoservico = cfixo.dataultimoservico,
-                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           diasemana = (DiaSemana)cfixo.diasemana,
                            documento = cli.documento,
                            empresaid = empresaid,
                            horario = cfixo.horario,
@@ -122,7 +122,7 @@ namespace Tcc.Entity
                            clienteid = cli.clienteid,
                            datanascimento = cli.datanascimento,
                            dataultimoservico = cfixo.dataultimoservico,
-                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           diasemana = (DiaSemana)cfixo.diasemana,
                            documento = cli.documento,
                            empresaid = empresaid,                           
                            horario = cfixo.horario,
@@ -155,7 +155,7 @@ namespace Tcc.Entity
                            clienteid = cli.clienteid,
                            datanascimento = cli.datanascimento,
                            dataultimoservico = cfixo.dataultimoservico,
-                           diasemana = (DayOfWeek)cfixo.diasemana,
+                           diasemana = (DiaSemana)cfixo.diasemana,
                            documento = cli.documento,
                            empresaid = empresaid,
                            horario = cfixo.horario,

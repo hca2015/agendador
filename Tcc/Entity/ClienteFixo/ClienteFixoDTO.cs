@@ -14,8 +14,8 @@ namespace Tcc.Entity
         [DataType(DataType.Date)]
         public DateTime? dataultimoservico { get; set; }
         [DisplayName("Dia da semana")]
-        [EnumDataType(typeof(DayOfWeek))]
-        public DayOfWeek? diasemana { get; set; }
+        [EnumDataType(typeof(DiaSemana))]
+        public DiaSemana? diasemana { get; set; }
         [DisplayName("Frequencia")]
         [EnumDataType(typeof(ClienteFixo.TipoFrequencia))]
         public ClienteFixo.TipoFrequencia? tipofrequencia { get; set; }

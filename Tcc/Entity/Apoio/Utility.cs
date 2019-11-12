@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -10,6 +11,24 @@ namespace Tcc
         {
             return Regex.Replace(str, @"[^0-9a-zA-Z]+", "");
         }
+    }
+
+    public enum DiaSemana
+    {
+        [Description("Domingo")]
+        Domingo = DayOfWeek.Sunday,
+        [Description("Segunda-Feira")]
+        Segunda = DayOfWeek.Monday,
+        [Description("Terça-Feira")]
+        Terca = DayOfWeek.Tuesday,
+        [Description("Quarta-Feira")]
+        Quarta = DayOfWeek.Wednesday,
+        [Description("Quinta-Feira")]
+        Quinta = DayOfWeek.Thursday,
+        [Description("Sexta-Feira")]
+        Sexta = DayOfWeek.Friday,
+        [Description("Sábado")]
+        Sabado = DayOfWeek.Saturday
     }
 
     public static class ValidaCNPJ
