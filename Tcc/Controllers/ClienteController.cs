@@ -108,13 +108,13 @@ namespace Tcc.Controllers
         }
 
         // GET: Cliente/Delete/5
-        public ActionResult Delete(decimal id)
+        public ActionResult Delete(int id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ClienteFixoDTO clienteFixoDTO = null;//db.ClienteFixoDTOes.Find(id);
+            ClienteFixoDTO clienteFixoDTO = db.getIdDTO(id);
             if (clienteFixoDTO == null)
             {
                 return HttpNotFound();

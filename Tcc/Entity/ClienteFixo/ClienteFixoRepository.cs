@@ -82,6 +82,32 @@ namespace Tcc.Entity
         }
 
 
+        public ClienteFixoDTO getIdDTO(int id)
+        {
+            var linq = from cfixo in ClienteFixos
+                       join emp in Empresas on cfixo.clientefixoid equals emp.clientefixoid
+                       join svc in Servicos on cfixo.servicoid equals svc.servicoid
+                       join cli in Clientes on cfixo.clienteid equals cli.clienteid
+                       where cfixo.clientefixoid == id
+                       select new ClienteFixoDTO()
+                       {
+                           clienteid = cli.clienteid,
+                           datanascimento = cli.datanascimento,
+                           dataultimoservico = cfixo.dataultimoservico,
+                           diasemana = (DiaSemana)cfixo.diasemana,
+                           documento = cli.documento,                           
+                           horario = cfixo.horario,
+                           empresaid = emp.empresaid,
+                           nomecliente = cli.nome,
+                           nomeservico = svc.descricao,
+                           servicoid = svc.servicoid,
+                           tipofrequencia = (ClienteFixo.TipoFrequencia)cfixo.tipofrequencia,
+                           clientefixoid = cfixo.clientefixoid
+                       };
+
+            return linq.FirstOrDefault();
+        }
+
         public List<ClienteFixoDTO> getEmpresa(int empresaid)
         {
             var linq = from cfixo in ClienteFixos
