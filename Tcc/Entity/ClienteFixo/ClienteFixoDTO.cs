@@ -38,7 +38,7 @@ namespace Tcc.Entity
         public string nomeservico { get; set; }
         public int? empresaid { get; set; }
 
-        public bool ValidarUltimoServico()
+        public bool ValidarUltimoServico(DateTime prData)
         {
             bool buscar = false;
 
@@ -47,16 +47,16 @@ namespace Tcc.Entity
                 switch (tipofrequencia)
                 {
                     case ClienteFixo.TipoFrequencia.Diario:
-                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 1;
+                        buscar = (prData - dataultimoservico.Value).TotalDays >= 1;
                         break;
                     case ClienteFixo.TipoFrequencia.Semanal:
-                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 7;
+                        buscar = (prData - dataultimoservico.Value).TotalDays >= 7;
                         break;
                     case ClienteFixo.TipoFrequencia.Quinzenal:
-                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 15;
+                        buscar = (prData - dataultimoservico.Value).TotalDays >= 15;
                         break;
                     case ClienteFixo.TipoFrequencia.Mensal:
-                        buscar = (DateTime.Now.Date - dataultimoservico.Value).TotalDays >= 30;
+                        buscar = (prData - dataultimoservico.Value).TotalDays >= 30;
                         break;
                     default:
                         break;

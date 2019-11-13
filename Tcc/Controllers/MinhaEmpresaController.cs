@@ -84,7 +84,7 @@ namespace Tcc.Controllers
                 if (lRetorno.Count == 0)
                 {
                     CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
-                    lCriarAgendaAutomatica.criar(DateTime.Now.Date);
+                    lCriarAgendaAutomatica.criar(lData);
                     lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
                 }
 

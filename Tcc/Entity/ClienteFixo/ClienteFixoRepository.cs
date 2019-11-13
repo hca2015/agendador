@@ -162,7 +162,7 @@ namespace Tcc.Entity
 
             List<ClienteFixoDTO> all =  linq.ToList();
 
-            var result = all.Where(x => x.ValidarUltimoServico()).FirstOrDefault();
+            var result = all.Where(x => x.ValidarUltimoServico(prDateTime)).FirstOrDefault();
 
             return result;
         }
