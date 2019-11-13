@@ -28,9 +28,9 @@ namespace Tcc.Controllers
         protected static string membershipId
         {
             get
-            {                
+            {
                 return System.Web.HttpContext.Current.User.Identity.GetUserId();
-            }           
+            }
         }
 
         [NotMapped]
@@ -38,8 +38,8 @@ namespace Tcc.Controllers
         protected User usuario
         {
             get
-            {                
-                if(membershipId != null)
+            {
+                if (membershipId != null)
                     return (new UsersRepository().GetUserId(membershipId));
 
                 return null;
@@ -68,18 +68,15 @@ namespace Tcc.Controllers
         {
             get
             {
-                if (_ContextoExecucao == null || _ContextoExecucao.getEmpresa() == null)
-                {
-                    _ContextoExecucao = new GenClass();
-                    if(empresa != null)
-                        _ContextoExecucao.addEntity("empresa", empresa);
-                    if(usuario != null)
-                        _ContextoExecucao.addEntity("usuario", usuario);
-                }
+                _ContextoExecucao = new GenClass();
+                if (empresa != null)
+                    _ContextoExecucao.addEntity("empresa", empresa);
+                if (usuario != null)
+                    _ContextoExecucao.addEntity("usuario", usuario);
 
                 return _ContextoExecucao;
             }
             set { _ContextoExecucao = value; }
-        }        
+        }
     }
 }

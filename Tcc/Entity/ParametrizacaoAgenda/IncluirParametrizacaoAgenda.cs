@@ -24,12 +24,18 @@ namespace Tcc.Entity
                 aEmpresa = aEmpresaRepository.getUser(currentUser.userid);
 
                 if (aEmpresa == null)
-                    addErro("Não há empresa associada");
+                    return withoutError(newError("Não há empresa associada"));
                 else
                     aParametrizacaoAgenda.empresaid = aEmpresa.empresaid;
 
                 if (aParametrizacaoAgenda.HORAFIM < aParametrizacaoAgenda.HORAINI)
-                    addErro("Hora fim não pode ser menor que hora início");
+                    return withoutError(newError("Hora fim não pode ser menor que hora início"));
+
+                if (aParametrizacaoAgenda.HORAINI < 0 || aParametrizacaoAgenda.HORAINI > 23)
+                    return withoutError(newError("Hora início não pode ser menor que 0 e maior que 23"));
+
+                if (aParametrizacaoAgenda.HORAFIM < 0 || aParametrizacaoAgenda.HORAFIM > 23)
+                    return withoutError(newError("Hora início não pode ser menor que 0 e maior que 23"));
             }            
 
             return withoutError();

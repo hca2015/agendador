@@ -81,6 +81,7 @@ namespace Tcc.Models
         [Display(Name = "Telefone")]
         [Required(ErrorMessage = "Telefone é obrigatorio, deve-se informar com o DDD")]
         [DataType(DataType.PhoneNumber)]
+        [MaxLength(11, ErrorMessage ="Não pode exceder 11 caracteres exemplo: 13999999999")]
         public string Telefone { get; set; }
 
         [Required]

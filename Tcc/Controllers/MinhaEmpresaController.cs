@@ -34,8 +34,9 @@ namespace Tcc.Controllers
 
             ParametrizacaoAgendaRepository lParametrizacaoAgendaRepository = new ParametrizacaoAgendaRepository();
 
-            lRetorno = lParametrizacaoAgendaRepository.getUser(usuario.userid);
-
+            if(empresa != null)
+                lRetorno = lParametrizacaoAgendaRepository.getEmpresa(empresa.empresaid);
+            
             if (lRetorno == null)
                 aContextoExecucao.addMessage("Parametrização de horários não encontrada! Incluir nova!", Message.kdType.Info);
 

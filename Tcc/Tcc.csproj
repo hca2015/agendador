@@ -347,7 +347,12 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Properties\PublishProfiles\agendadortcc - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\agendadortcc - FTP1.pubxml" />
+    <None Include="Properties\PublishProfiles\agendadortcc - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\agendadortcc - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\agendadortcc - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\haryeltcc - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\haryeltcc - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
