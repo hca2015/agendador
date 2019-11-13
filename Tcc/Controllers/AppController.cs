@@ -68,11 +68,14 @@ namespace Tcc.Controllers
         {
             get
             {
-                _ContextoExecucao = new GenClass();
-                if (empresa != null)
-                    _ContextoExecucao.addEntity("empresa", empresa);
-                if (usuario != null)
-                    _ContextoExecucao.addEntity("usuario", usuario);
+                if (_ContextoExecucao == null || _ContextoExecucao.getEmpresa() == null)
+                {
+                    _ContextoExecucao = new GenClass();
+                    if (empresa != null)
+                        _ContextoExecucao.addEntity("empresa", empresa);
+                    if (usuario != null)
+                        _ContextoExecucao.addEntity("usuario", usuario);
+                }
 
                 return _ContextoExecucao;
             }
