@@ -14,7 +14,7 @@ namespace Tcc.Controllers
         private const string _dateFormat = "yyyy-MM-dd HH:mm:ss";
         public ActionResult MinhaEmpresa(DateTime? prData = null)
         {
-            if(!prData.HasValue)
+            if (!prData.HasValue)
                 ViewBag.data = DateTime.Now.ToShortDateString();
             else
                 ViewBag.data = prData.Value.ToShortDateString();
@@ -34,9 +34,9 @@ namespace Tcc.Controllers
 
             ParametrizacaoAgendaRepository lParametrizacaoAgendaRepository = new ParametrizacaoAgendaRepository();
 
-            if(empresa != null)
+            if (empresa != null)
                 lRetorno = lParametrizacaoAgendaRepository.getEmpresa(empresa.empresaid);
-            
+
             if (lRetorno == null)
                 aContextoExecucao.addMessage("Parametrização de horários não encontrada! Incluir nova!", Message.kdType.Info);
 
@@ -75,21 +75,26 @@ namespace Tcc.Controllers
             //lData = new DateTime(2019, 10, 23);
 
             AgendaRepository lAgendaRepository = new AgendaRepository();
-            List<AgendaDTO> lRetorno = lAgendaRepository.getAgendaDTO(lData);
+            List<AgendaDTO> lRetorno = new List<AgendaDTO>();
 
-            if (lRetorno.Count == 0)
+            if (empresa != null)
             {
-                CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
-                lCriarAgendaAutomatica.criar(DateTime.Now.Date);
-                lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
-            }
+                lRetorno = lAgendaRepository.getAgendaDTO(lData, empresa.empresaid);
 
-            foreach (var item in lRetorno)
-            {
-                if (item.cliente != null && item.cliente.datanascimento.HasValue)
-                    item.cliente.datanascimento = item.cliente.datanascimento.Value.Date;
-                if (item.cliente != null && item.cliente.dataultimoservico.HasValue)
-                    item.cliente.dataultimoservico = item.cliente.dataultimoservico.Value.Date;
+                if (lRetorno.Count == 0)
+                {
+                    CriarAgendaAutomatica lCriarAgendaAutomatica = new CriarAgendaAutomatica(aContextoExecucao);
+                    lCriarAgendaAutomatica.criar(DateTime.Now.Date);
+                    lRetorno = lCriarAgendaAutomatica.acoAgendaDTO;
+                }
+
+                foreach (var item in lRetorno)
+                {
+                    if (item.cliente != null && item.cliente.datanascimento.HasValue)
+                        item.cliente.datanascimento = item.cliente.datanascimento.Value.Date;
+                    if (item.cliente != null && item.cliente.dataultimoservico.HasValue)
+                        item.cliente.dataultimoservico = item.cliente.dataultimoservico.Value.Date;
+                }
             }
 
             return lRetorno;
@@ -100,13 +105,13 @@ namespace Tcc.Controllers
             DateTime lData;
             List<AgendaDTO> lRetorno = new List<AgendaDTO>();
 
-            if (DateTime.TryParse(prData, out lData))
+            if (DateTime.TryParse(prData, out lData) && empresa != null)
             {
                 //REMOVER***************************************************************************
                 //lData = new DateTime(2019, 10, 23);
 
                 AgendaRepository lAgendaRepository = new AgendaRepository();
-                lRetorno = lAgendaRepository.getAgendaDTO(lData);
+                lRetorno = lAgendaRepository.getAgendaDTO(lData, empresa.empresaid);
 
                 if (lRetorno.Count == 0)
                 {

@@ -78,7 +78,7 @@ namespace Tcc.Entity
             }   
 
             if(withoutError())
-                acoAgendaDTO = aAgendaRepository.getAgendaDTO(aData);
+                acoAgendaDTO = aAgendaRepository.getAgendaDTO(aData, aEmpresa.empresaid);
 
             return withoutError();
         }

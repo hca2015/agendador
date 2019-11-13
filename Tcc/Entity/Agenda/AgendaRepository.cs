@@ -83,7 +83,7 @@ namespace Tcc.Entity
             return (from a in Agendas where a.agendaid == id select a).FirstOrDefault();
         }
 
-        public List<AgendaDTO> getAgendaDTO(DateTime prData)
+        public List<AgendaDTO> getAgendaDTO(DateTime prData, int empresaid)
         {
             var linq = from ag in Agendas
                        join emp in Empresas on ag.empresaid equals emp.empresaid
@@ -116,7 +116,7 @@ namespace Tcc.Entity
                        join srv in Servicos on ag.servicoid equals srv.servicoid into ServicoLeft
                        from srvEmpty in ServicoLeft.DefaultIfEmpty()
 
-                       where ag.dia == prData.Date
+                       where ag.dia == prData.Date && ag.empresaid == empresaid
                        select new AgendaDTO
                        {
                            agenda = ag,
